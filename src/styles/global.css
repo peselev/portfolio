@@ -19,6 +19,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
   }
 
   body {
@@ -33,7 +35,7 @@
     letter-spacing: -0.02em;
   }
 
-  /* Prose styling for Markdown case studies */
+  /* ---------- Prose for case studies ---------- */
   .prose-case h1 {
     font-size: 2.5rem;
     font-weight: 600;
@@ -46,6 +48,7 @@
     margin-top: 3rem;
     margin-bottom: 1rem;
     line-height: 1.2;
+    scroll-margin-top: 5rem;
   }
   .prose-case h3 {
     font-size: 1.25rem;
@@ -82,6 +85,9 @@
     font-weight: 600;
     color: theme(--color-gray-900);
   }
+  .prose-case em {
+    font-style: italic;
+  }
   .prose-case code {
     background: theme(--color-gray-100);
     padding: 0.125rem 0.375rem;
@@ -97,7 +103,71 @@
     margin: 1.5rem 0;
   }
 
-  /* Native details/summary styling */
+  /* ---------- Tables: smaller font, more spacing, borders ---------- */
+  .prose-case table {
+    width: 100%;
+    margin: 1.5rem 0 2rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    border-collapse: collapse;
+    border: 1px solid theme(--color-gray-200);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .prose-case thead {
+    background: theme(--color-gray-50);
+  }
+  .prose-case th {
+    text-align: left;
+    font-weight: 600;
+    color: theme(--color-gray-900);
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid theme(--color-gray-200);
+    border-right: 1px solid theme(--color-gray-200);
+    vertical-align: top;
+  }
+  .prose-case th:last-child { border-right: 0; }
+  .prose-case td {
+    padding: 1rem 1.25rem;
+    color: theme(--color-gray-700);
+    border-bottom: 1px solid theme(--color-gray-200);
+    border-right: 1px solid theme(--color-gray-200);
+    vertical-align: top;
+  }
+  .prose-case td:last-child { border-right: 0; }
+  .prose-case tbody tr:last-child td { border-bottom: 0; }
+
+  /* ---------- Images: tight caption, small gray text, no italic ---------- */
+  .prose-case img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.75rem auto 0; /* margin only on top; caption sits directly under */
+    border-radius: 0.5rem;
+    border: 1px solid theme(--color-gray-200);
+  }
+  /* When an img is followed by a single-line caption paragraph (treated as
+     immediately-adjacent <em> wrapper from markdown), the figure pattern below
+     gives us the tight caption look. */
+  .prose-case figure {
+    margin: 1.75rem 0;
+  }
+  .prose-case figure img {
+    margin: 0 auto;
+  }
+  .prose-case figure figcaption,
+  .prose-case .image-caption {
+    display: block;
+    text-align: center;
+    color: theme(--color-gray-500);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+    font-style: normal;
+    font-family: var(--font-sans);
+  }
+
+  /* Native details/summary styling - unchanged */
   details {
     border: 1px solid theme(--color-gray-200);
     border-radius: 0.5rem;
