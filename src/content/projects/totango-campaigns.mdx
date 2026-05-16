@@ -9,14 +9,9 @@ tags: ["Platform", "Tech Debt", "Enterprise", "Stakeholder Alignment"]
 featured: true
 ---
 
-import Callout from "../../components/Callout.astro";
 import MetricGrid from "../../components/MetricGrid.astro";
 import UserStory from "../../components/UserStory.astro";
 import Caption from "../../components/Caption.astro";
-
-<Callout variant="tldr">
-  Totango's Campaigns feature was accumulating quiet technical debt that blocked enterprise use cases and eroded customer trust. I made the business case for a backend overhaul, directed a three-phase decoupling of the legacy monolith with zero downtime, and used the new infrastructure to ship multi-channel campaigns and advanced dynamic data. The work resolved 33 architecture-linked bugs, met a 15-minute SLA at 5× projected workload, and directly influenced two top-tier enterprise expansion deals.
-</Callout>
 
 **About Totango**
 
@@ -189,57 +184,23 @@ My research with the engineering team revealed that building true cross-object d
 
 All initiatives were successfully deployed, and outperformed the goals the team set for them:
 
-{/* ===== VERSION A — original bullet list ===== */}
-
-### Version A — Bullet list
-
-#### Architecture Overhaul
-
-- Stage 3 was deployed according to the original timeline
-- Workload tests passed: several campaigns targeting 500,000 recipients were activated simultaneously, the server correctly increased the bandwidth to process it on time (within 15 minutes requirement)
-- Within first 4 weeks after deployment:
-    - all top 10 customers reported to their respective CSMs they see noticeable improvement in stability of the service.
-    - 4 major customers sent personalized messages praising they now don't need to split large campaigns into multiple clones.
-    - support team triaged all bugs that were put on hold and linked to the architecture bottlenecks: 71.7% were closed as they couldn't be reproduced anymore.
-
-#### Multi-Channel Campaigns
-
-- The main design partner adopted the feature immediately, and launched multiple chatbot campaigns within the first 4 weeks after the deployment. Totango CS team was able to capitalize on the positive sentiment, and secured a major expansion deal (+33% of ARR).
-- Two prospective deals (potentially top 12 and top 9 in ARR) were successfully closed due to demonstrated capability of integrating with their chatbots.
-
-#### Advanced Dynamic Data
-
-- Our top 3 customer adopted the solution one week **before** it was released for General Availability, and immediately went from Churn Risk to securing renewal, and went into discussions of expansion within three weeks.
-- Within the first four weeks after the release, 16 out of top 20 customers had designed and launched campaigns that used Advanced Dynamic Data.
-- Solution and Implementation team received two personal emails from critical customers, praising the newly released feature, and the use cases it unlocked.
-
----
-
-{/* ===== VERSION B — hybrid (metric grid + narrative) ===== */}
-
-### Version B — Metric grid + narrative
-
 <MetricGrid metrics={[
   { value: "500K", label: "Recipients in burst test", detail: "Processed within 15-min SLA" },
   { value: "71.7%", label: "Architecture bugs closed", detail: "As no-longer-reproducible after migration" },
   { value: "+33%", label: "ARR from one expansion", detail: "Influenced by chatbot capability" }
 ]} />
 
-#### Architecture Overhaul
+### Architecture Overhaul
 
 Stage 3 was deployed according to the original timeline. Workload tests passed: several campaigns targeting 500,000 recipients were activated simultaneously, the server correctly increased the bandwidth to process it on time (within 15 minutes requirement). Within first 4 weeks after deployment, all top 10 customers reported to their respective CSMs they see noticeable improvement in stability of the service. 4 major customers sent personalized messages praising they now don't need to split large campaigns into multiple clones. Support team triaged all bugs that were put on hold and linked to the architecture bottlenecks: 71.7% were closed as they couldn't be reproduced anymore.
 
-#### Multi-Channel Campaigns
+### Multi-Channel Campaigns
 
 The main design partner adopted the feature immediately, and launched multiple chatbot campaigns within the first 4 weeks after the deployment. Totango CS team was able to capitalize on the positive sentiment, and secured a major expansion deal (+33% of ARR). Two prospective deals (potentially top 12 and top 9 in ARR) were successfully closed due to demonstrated capability of integrating with their chatbots.
 
-#### Advanced Dynamic Data
+### Advanced Dynamic Data
 
 Our top 3 customer adopted the solution one week **before** it was released for General Availability, and immediately went from Churn Risk to securing renewal, and went into discussions of expansion within three weeks. Within the first four weeks after the release, 16 out of top 20 customers had designed and launched campaigns that used Advanced Dynamic Data. Solution and Implementation team received two personal emails from critical customers, praising the newly released feature, and the use cases it unlocked.
-
----
-
-{/* ===== END outcomes versions ===== */}
 
 ## Key Takeaways
 

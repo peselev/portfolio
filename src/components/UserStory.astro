@@ -1,6 +1,4 @@
 ---
-// Subtle, quiet styling. Single story or multiple stories supported.
-// Pass `count={2}` etc. if you want pluralized label, otherwise defaults to "USER STORY".
 export interface Props {
   label?: string;
 }
@@ -8,7 +6,7 @@ export interface Props {
 const { label = "User Story" } = Astro.props;
 ---
 
-<aside class="border-l-2 border-gray-300 bg-gray-50 rounded-r-md px-5 py-4 my-5">
+<aside class="border-l-2 border-gray-300 pl-5 py-1 my-5">
   <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">
     {label}
   </p>

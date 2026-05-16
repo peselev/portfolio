@@ -1,5 +1,5 @@
 ---
-// Sticky sidebar TOC: auto-generated client-side from H2 headings within .prose-case
+// Sticky sidebar TOC: H2 (top level) and H3 (nested, indented).
 // Highlights the active section as the user scrolls.
 ---
 
@@ -7,7 +7,7 @@
   <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-3">
     On this page
   </p>
-  <nav id="case-toc-nav" class="text-sm space-y-2 border-l border-gray-200 pl-4">
+  <nav id="case-toc-nav" class="text-sm border-l border-gray-200 pl-4">
     <!-- Links injected by script -->
   </nav>
 </aside>
@@ -19,31 +19,38 @@
     const toc = document.getElementById("case-toc");
     if (!article || !nav || !toc) return;
 
-    const headings = article.querySelectorAll("h2");
+    const headings = article.querySelectorAll("h2, h3");
     if (headings.length < 2) {
       toc.style.display = "none";
       return;
     }
 
+    const slugify = (txt: string) =>
+      txt
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-");
+
     headings.forEach((h) => {
-      if (!h.id) {
-        const slug = (h.textContent || "")
-          .toLowerCase()
-          .trim()
-          .replace(/[^\w\s-]/g, "")
-          .replace(/\s+/g, "-");
-        h.id = slug;
-      }
+      if (!h.id) h.id = slugify(h.textContent || "");
       const link = document.createElement("a");
       link.href = `#${h.id}`;
       link.textContent = h.textContent;
-      link.className =
-        "block text-gray-500 hover:text-gray-900 transition-colors leading-snug toc-link";
+      const isH3 = h.tagName === "H3";
+      link.className = [
+        "block py-1 leading-snug toc-link",
+        "text-gray-500 hover:text-gray-900 transition-colors",
+        isH3 ? "pl-4 text-[0.8rem]" : "font-medium",
+      ].join(" ");
       link.dataset.target = h.id;
       nav.appendChild(link);
     });
 
-    // Active section highlighting via IntersectionObserver
+    // Don't observe headings inside <details> (collapsed by default — would
+    // create flickery active states for content the user can't see).
+    const observable = Array.from(headings).filter((h) => !h.closest("details"));
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -54,12 +61,17 @@
             nav
               .querySelectorAll(".toc-link")
               .forEach((l) => l.classList.remove("text-accent-700", "font-medium"));
-            link.classList.add("text-accent-700", "font-medium");
+            // Re-apply font-medium for H2s after clearing
+            nav.querySelectorAll(".toc-link").forEach((l) => {
+              if (!l.classList.contains("pl-4")) l.classList.add("font-medium");
+            });
+            link.classList.add("text-accent-700");
+            if (!link.classList.contains("pl-4")) link.classList.add("font-medium");
           }
         });
       },
       { rootMargin: "-20% 0px -70% 0px" }
     );
-    headings.forEach((h) => observer.observe(h));
+    observable.forEach((h) => observer.observe(h));
   });
 </script>
