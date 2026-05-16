@@ -1,7 +1,7 @@
 ---
 export interface Props {
   title?: string;
-  variant?: "info" | "insight" | "warning";
+  variant?: "info" | "insight" | "warning" | "tldr";
 }
 
 const { title, variant = "info" } = Astro.props;
@@ -10,22 +10,43 @@ const variants = {
   info: "border-accent-700 bg-accent-50",
   insight: "border-amber-500 bg-amber-50",
   warning: "border-red-500 bg-red-50",
+  tldr: "border-accent-700 bg-accent-50",
 };
 
 const labels = {
   info: "Note",
   insight: "Insight",
   warning: "Caveat",
+  tldr: "TL;DR",
 };
+
+// TL;DR gets more padding, bigger label, deliberate emphasis
+const isTldr = variant === "tldr";
 ---
 
-<aside class:list={["border-l-4 p-5 my-6 rounded-r-lg", variants[variant]]}>
-  {title && (
-    <p class="text-xs uppercase tracking-widest font-semibold text-gray-700 mb-2">
+<aside
+  class:list={[
+    "border-l-4 rounded-r-lg",
+    variants[variant],
+    isTldr ? "p-7 my-8" : "p-5 my-6",
+  ]}
+>
+  {(title || isTldr) && (
+    <p
+      class:list={[
+        "uppercase font-semibold text-accent-700",
+        isTldr ? "text-sm tracking-[0.18em] mb-3" : "text-xs tracking-widest text-gray-700 mb-2",
+      ]}
+    >
       {title || labels[variant]}
     </p>
   )}
-  <div class="text-gray-800 text-base leading-relaxed">
+  <div
+    class:list={[
+      "text-gray-800 leading-relaxed",
+      isTldr ? "text-lg" : "text-base",
+    ]}
+  >
     <slot />
   </div>
 </aside>

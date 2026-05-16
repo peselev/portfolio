@@ -1,0 +1,203 @@
+---
+title: "Campaigns: Turning Tech Debt into Enterprise Revenue"
+summary: "Led a zero-downtime overhaul of a 10-year-old email engine, then used the new architecture to ship multi-channel campaigns and cross-object dynamic data — work that influenced two top-tier enterprise expansion deals."
+company: "Totango"
+role: "Senior Product Manager"
+period: "2023 – 2024"
+order: 1
+tags: ["Platform", "Tech Debt", "Enterprise", "Stakeholder Alignment"]
+featured: true
+---
+
+import Callout from "../../components/Callout.astro";
+import MetricGrid from "../../components/MetricGrid.astro";
+
+<Callout variant="tldr">
+  Totango's Campaigns feature was accumulating quiet technical debt that blocked enterprise use cases and eroded customer trust. I made the business case for a backend overhaul, directed a three-phase decoupling of the legacy monolith with zero downtime, and used the new infrastructure to ship multi-channel campaigns and advanced dynamic data. The work resolved 33 architecture-linked bugs, met a 15-minute SLA at 5× projected workload, and directly influenced two top-tier enterprise expansion deals.
+</Callout>
+
+## Context
+
+Totango is a Customer Success Platform focused on enterprise use cases — complex data hierarchies, large data volumes, nurturing existing customer relationships, surfacing churn signals, and driving expansion and renewals.
+
+Within Totango, Campaigns let Customer Success teams run email campaigns directly from the platform they own, without depending on Sales or Marketing. They could segment and message customers using CS-specific metrics and attributes — the kind of nuanced targeting that generic marketing tools can't reach.
+
+Virtually every established customer adopted Campaigns. It was a major source of platform stickiness and a meaningful drag on Totango's churn rate. But it had a strategic blind spot: Campaigns by itself didn't generate new revenue, and no enterprise customer ever subscribed to Totango *for* Campaigns.
+
+## The Problem
+
+Customers routinely requested new capabilities or improvements — they felt Campaigns was incomplete and unreliable. Most of those requests traced back to the same root cause: a monolithic, 10-year-old architecture that had reached its workload ceiling.
+
+The challenge was political, not technical. Because Campaigns rarely surfaced as the reason for lost deals or churn, it was hard to justify pulling engineering resources away from high-visibility features to address hidden tech debt.
+
+## Approach
+
+To build a compelling business case, I cross-referenced support tickets with implementation blockers to quantify the real costs of the debt. By translating engineering's architectural concerns into tangible business risks for Sales and CS leadership, I aligned stakeholders around three issues:
+
+| Issue | Manifestation | Impact |
+| --- | --- | --- |
+| Monolithic architecture with 10+ years of accumulated debt | Feature became unstable above a certain campaign size, producing unreliable data with no clear pattern | Users anxious every time they launched a large campaign; steady flow of bug reports from automations triggered or not triggered unexpectedly |
+| Data silos | Dynamic data (using `{attribute}` syntax) was limited to the directly targeted object only | Multiple high-value enterprise use cases were impossible, reducing communication value |
+| Single channel: email only | Architecture couldn't support other message delivery channels | Multi-channel messaging orchestration was off the table |
+
+The narrative that moved this forward was:
+
+> Campaigns runs on architecture designed over a decade ago. Workload spikes choke the server, leading to unreliable results and unexpected downstream behavior. The issue isn't widespread yet, but as Totango grows, it will worsen. A compromised customer-outreach engine gradually erodes trust in Totango as a CS platform — slowly enough to be almost undetectable, but it accumulates. With the pressing need for new features that empower CS teams, the new architecture addresses the workload capacity issue *and* unlocks two major paths for delivering value to enterprise customers: breaking data silos, and enabling multi-channel integration.
+
+After approval, the plan was:
+
+1. Build a new backend to eliminate the bottlenecks and tech debt
+2. Once customers were migrated to the new system, deliver **Multi-Channel** and **Improved Dynamic Data** features
+
+## Execution
+
+### New Architecture
+
+Partnering with engineering, we designed a three-phase decoupling. Each phase was a meaningful improvement on its own — the rollout was structured so that even if subsequent phases slipped, the work already shipped would still deliver value.
+
+**User stories driving the architecture:**
+
+- *As a user, I want to activate campaigns targeting 100,000+ recipients and have them process within 15 minutes after picking up from the queue.*
+- *As a reliability engineer, I need the Campaigns infrastructure to seamlessly absorb sudden workload spikes so that overall platform stability and downstream services remain unaffected during peak enterprise usage.*
+
+<details>
+  <summary>Architecture details: from monolith to event-driven services</summary>
+
+  #### Old flow
+
+  ![Legacy architecture: a single Ironman service handles all Campaigns work](/images/work/campaigns/architecture-old.jpg)
+
+  The legacy architecture relied entirely on a single centralized service called "Ironman." It was responsible for validating services and campaigns, fetching users, filtering duplicates, applying frequency settings, building email content, and updating campaign attributes and statistics. Because Ironman did everything, it was difficult to maintain, hard to extend, and nearly impossible to diagnose when things went wrong. This monolithic design was the root of the workload capacity issues and unexpected downstream behavior.
+
+  #### Phase 1
+
+  ![Phase 1: Trigger Campaign Service and Segmentation Trigger Service extracted from Ironman, communicating via Kafka](/images/work/campaigns/architecture-phase-1.jpg)
+
+  The first phase initiated decoupling. The primary goal was moving the user-fetching mechanism out of Ironman. Two new services were introduced — Trigger Campaign Service and Segmentation Trigger Service — and the architecture began transitioning to an event-driven model using Kafka to pass trigger and scheduling events between old and new services.
+
+  #### Phase 2
+
+  ![Phase 2: Duplicate filtering and frequency settings move out of Ironman; scheduling bypasses it via Kafka](/images/work/campaigns/architecture-phase-2.jpg)
+
+  Phase 2 further alleviated the processing burden. The mechanism for filtering duplicate users and enforcing frequency settings moved out of Ironman to the new services. The initial scheduling flow now bypassed Ironman entirely, routing through the new Trigger and Segmentation services via Kafka before passing qualified segments back to Ironman for final processing.
+
+  #### Phase 3 (final)
+
+  ![Phase 3: Ironman fully replaced by Email Campaign Service; mailing loop closed via Webhook listener](/images/work/campaigns/architecture-phase-3.jpg)
+
+  The final phase achieved a fully modernized architecture. Ironman was replaced entirely. A newly introduced Email Campaign Service took over final assembly and orchestration. The mailing service loop was closed using a Webhook listener service to capture campaign email statistics, routed to an account-updater-input for storage. Critically, the service was decoupled from the email channel — mailing and webhook listener services were ready for integration with other messaging protocols.
+</details>
+
+#### Risk-mitigated rollout
+
+After every phase, QA performed robust testing on each step. Customers were migrated in cohorts selected on multiple factors: historical usage patterns, last 7 days of activity, and others.
+
+I took advantage of the engineering team's location (Israel) by scheduling migrations for Sundays. This put deployments on the platform's lowest-workload day, giving us a natural safety net.
+
+### Multi-Channel Campaigns
+
+Once the new architecture was in place, multi-channel became a low-effort, high-impact initiative ("low-effort" if you exclude the architecture overhaul that made it possible):
+
+- I designed the feature using the existing well-known UI/UX, which reduced engineering lift, shortened time-to-market, and almost eliminated the learning curve for users
+- The use case was ready, with several customers pre-committed as first adopters
+
+The scope split into two uneven parts: (1) audit existing code for hidden assumptions like "campaigns *is and always is* email" and fix them, and (2) build an integration with a selected provider.
+
+The first integration was **Sunshine Conversations** — Zendesk's communication engine that already powered chatbots for several Totango customers. I partnered with one enterprise customer to validate the use case, happy path, differences, and limitations compared to email.
+
+**User story:** *As a user, I want to create campaigns that use a chatbot instead of email, so that I can deliver personal messages to users directly through the chatbot on our website.*
+
+**User flow** — illustrated with a hypothetical SaaSPro customer that uses Zendesk chat on their website and wants to add chatbot delivery to their messaging mix:
+
+![Admin designs a chatbot campaign in Totango the same way they design a traditional email campaign](/images/work/campaigns/chatbot-campaign-design.png)
+
+*Admin designs a chatbot campaign in Totango the same way they design a traditional email campaign.*
+
+![The content editor is the same WYSIWYG editor used in email campaigns, with features unsupported by Sunshine Conversations disabled](/images/work/campaigns/chatbot-content-editor.png)
+
+*The content editor is the same WYSIWYG editor used in email campaigns, with features unsupported by Sunshine Conversations disabled.*
+
+Once a chat campaign is activated, the rest happens automatically. From the recipient's perspective, they get a personal message in the chatbot the next time they visit the customer's website:
+
+![The top conversation was created automatically by Totango Campaign targeting this specific recipient when he visited the website](/images/work/campaigns/chatbot-recipient-view.png)
+
+*The top conversation was created automatically by a Totango Campaign targeting this specific recipient when he visited the website (demo showroom, not a real customer).*
+
+### Advanced Dynamic Data
+
+Campaigns let users insert dynamic data — company or user attributes like `{First Name}` that get replaced with actual values when the message is processed. Companies are linked to users in a one-to-many relationship.
+
+The major limitation: data could only come from the *targeted user* object, or the *company* linked to that user. With most enterprise customers running multi-level data hierarchies, this blocked the most valuable use cases.
+
+**User story:** *As a user, I want to send one email that contains dynamic data from objects outside the targeted user or targeted company, so I can share all relevant information at once instead of targeting the same recipient multiple times.*
+
+Research with engineering revealed that true cross-object data access wasn't technically feasible. Rather than abandoning the feature, I partnered with Design and identified a high-ROI trade-off: a solution that restricted data retrieval to the user's immediate hierarchy tree — siblings, parents, and children — with predefined object types. This pivot transformed a massive engineering lift into a manageable task and unlocked the most critical enterprise use cases within our existing tech constraints.
+
+After validating with several customers, I scoped and directed the team to build the **Segment Table Component**:
+
+![User adds the component; the entire table is dynamic — content is defined at the moment of creating the message](/images/work/campaigns/segment-table-editor.png)
+
+*User adds the component; the entire table is dynamic — content is defined at the moment of creating the message.*
+
+![A single email notifying Sally about upcoming Renewals: each row is a separate Company object that shares Sally's hierarchy branch and is nearing renewal](/images/work/campaigns/segment-table-output.png)
+
+*A single email notifying Sally about upcoming renewals — each row is a separate Company object in Totango (type Project) that belongs to the same branch in the hierarchy tree as Sally and is nearing the renewal date.*
+
+## Impact & Outcomes
+
+{/* ========================================= */}
+{/* VERSION A — ORIGINAL (bullet list)         */}
+{/* To use this version, leave it uncommented  */}
+{/* and comment out Version B below.            */}
+{/* ========================================= */}
+
+All three initiatives deployed successfully and outperformed the team's original goals.
+
+**Architecture Overhaul**
+- Phase 3 deployed on the original timeline
+- Workload tests passed: several campaigns targeting 500,000 recipients launched simultaneously; the server correctly scaled bandwidth to process everything within the 15-minute requirement
+- Within the first 4 weeks after deployment:
+  - All top 10 customers reported noticeable stability improvements to their respective CSMs
+  - 4 major customers sent personalized messages praising that they no longer needed to split large campaigns into multiple clones
+  - Support team triaged all bugs that had been put on hold and linked to architecture bottlenecks: 71.7% closed as no-longer-reproducible
+
+**Multi-Channel Campaigns**
+- The main design partner adopted the feature immediately and launched multiple chatbot campaigns within the first 4 weeks; Totango's CS team capitalized on the positive sentiment and secured a major expansion deal (+33% ARR)
+- Two prospective deals (potentially top 12 and top 9 by ARR) closed thanks to demonstrated chatbot integration capability
+
+**Advanced Dynamic Data**
+- Our top 3 customer adopted the solution one week *before* general availability, went from churn risk to securing renewal, and entered expansion discussions within three weeks
+- Within the first four weeks after release, 16 of the top 20 customers had designed and launched campaigns using Advanced Dynamic Data
+- The Solution and Implementation teams received two personal emails from critical customers, praising the new feature and the use cases it unlocked
+
+{/* ========================================= */}
+{/* VERSION B — ALTERNATIVE (hybrid grid)      */}
+{/* To use this version, uncomment the block   */}
+{/* below and comment out Version A above.      */}
+{/* ========================================= */}
+
+{/*
+<MetricGrid metrics={[
+  { value: "500K", label: "Recipients in burst test", detail: "Processed within 15-min SLA" },
+  { value: "71.7%", label: "Architecture bugs closed", detail: "As no-longer-reproducible after migration" },
+  { value: "+33%", label: "ARR from one expansion", detail: "Influenced by chatbot capability" }
+]} />
+
+**Architecture Overhaul.** Phase 3 deployed on the original timeline. Within the first 4 weeks, all top 10 customers reported noticeable stability improvements to their CSMs, and 4 major customers sent personalized messages praising that they no longer needed to split large campaigns into multiple clones.
+
+**Multi-Channel Campaigns.** The main design partner adopted the feature immediately and launched multiple chatbot campaigns within the first 4 weeks. Two prospective deals (potentially top 12 and top 9 by ARR) closed thanks to demonstrated chatbot integration capability.
+
+**Advanced Dynamic Data.** Our top 3 customer adopted the solution one week before general availability, went from churn risk to securing renewal, and entered expansion discussions within three weeks. Within four weeks of release, 16 of the top 20 customers had designed and launched campaigns using Advanced Dynamic Data.
+*/}
+
+## Key Takeaways
+
+This project originally started when I was digging into the root causes of evasive bugs and unexpected behavior. It wasn't on our roadmap. What stands out is that the company was willing to quickly reassess and adjust plans once the real picture became clear.
+
+I'm reminded again and again that the gap between business and tech stakeholders is not as profound as it's sometimes portrayed. Everyone is aligned in wanting the company to succeed; no one is deliberately promoting recklessness. The misalignment can be eliminated by changing the optics.
+
+Yes — it was true that we couldn't afford dedicating our top engineers to infrastructure with no meaningful new features at quarter's end. It was also true that we could leave the system as-is and hope customers kept tolerating unstable processing, with no perfect storm leading to catastrophic failure.
+
+Fear-mongering rarely works as a motivator to spend scarce resources. What worked was uncovering and showing real risks in a quantifiable way — and getting maximum ROI from the new architecture, not just "do the same better" but "do the same *and* something new."
+
+Finding creative ways to deliver value to customers is a major part of the PM role.
