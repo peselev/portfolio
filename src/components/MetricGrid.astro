@@ -1,0 +1,23 @@
+---
+export interface Metric {
+  value: string;
+  label: string;
+  detail?: string;
+}
+
+export interface Props {
+  metrics: Metric[];
+}
+
+const { metrics } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-10">
+  {metrics.map((m) => (
+    <div class="border border-gray-200 rounded-xl p-6 bg-white">
+      <p class="font-display text-4xl font-semibold text-accent-700 tracking-tight">{m.value}</p>
+      <p class="text-sm font-medium text-gray-900 mt-2">{m.label}</p>
+      {m.detail && <p class="text-sm text-gray-600 mt-1">{m.detail}</p>}
+    </div>
+  ))}
+</div>

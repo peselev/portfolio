@@ -1,0 +1,41 @@
+---
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+};
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/work", label: "Work" },
+  { href: "/about", label: "About" },
+  { href: "/resume", label: "Resume" },
+];
+---
+
+<header class="border-b border-gray-200 bg-white/80 backdrop-blur sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/" class="font-display font-semibold text-lg tracking-tight text-gray-900 hover:text-accent-700 transition-colors">
+      Konstantin Peselev
+    </a>
+    <nav class="flex items-center gap-8">
+      {links.slice(1).map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            "text-sm font-medium transition-colors",
+            isActive(link.href) ? "text-accent-700" : "text-gray-600 hover:text-gray-900",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="mailto:konstantin@peselev.com"
+        class="text-sm font-medium bg-accent-700 hover:bg-accent-900 text-white px-4 py-2 rounded-lg transition-colors"
+      >
+        Contact
+      </a>
+    </nav>
+  </div>
+</header>

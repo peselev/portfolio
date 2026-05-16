@@ -1,0 +1,22 @@
+# Konstantin Peselev — Senior Product Manager
+
+> Senior Product Manager with 10+ years of B2B SaaS experience. Currently at Totango (acquired Catalyst), leading Growth, Data Governance, and AI product roadmaps. Co-founder background. MBA from NYU Stern.
+
+This is the portfolio site of Konstantin Peselev. The site is a curated set of product management case studies, an about page, and a resume. Static content; updates infrequently.
+
+## Primary content
+
+- [Home](/): Overview, elevator pitch, gallery of selected case studies.
+- [Work](/work): Complete archive of case studies.
+- [About](/about): Background and product philosophy.
+- [Resume](/resume): Career history and education. PDF available at /cv.pdf.
+
+## Case studies
+
+Each case study lives at /work/{slug}. The slug is derived from the project filename. Case studies follow a consistent structure: context, problem, what I did, outcomes, takeaway.
+
+## Contact
+
+- Email: konstantin@peselev.com
+- LinkedIn: (replace with handle)
+- GitHub: (replace with handle)

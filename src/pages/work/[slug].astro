@@ -1,0 +1,44 @@
+---
+import Base from "../../layouts/Base.astro";
+import Tag from "../../components/Tag.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Base title={`${project.data.title} — Konstantin Peselev`} description={project.data.summary}>
+  <article class="max-w-3xl mx-auto px-6 pt-16 pb-16">
+    <!-- Back link -->
+    <a href="/" class="text-sm text-gray-600 hover:text-accent-700 transition-colors inline-flex items-center gap-2 mb-10">
+      <span>←</span> Back to all work
+    </a>
+
+    <!-- Case header -->
+    <header class="mb-12 pb-10 border-b border-gray-200">
+      <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-4">
+        {project.data.company} · {project.data.role} · {project.data.period}
+      </p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-gray-900 tracking-tight leading-[1.1] mb-5">
+        {project.data.title}
+      </h1>
+      <p class="text-xl text-gray-600 leading-relaxed mb-6">{project.data.summary}</p>
+      <div class="flex flex-wrap gap-2">
+        {project.data.tags.map((tag: string) => <Tag label={tag} />)}
+      </div>
+    </header>
+
+    <!-- Markdown body -->
+    <div class="prose-case">
+      <Content />
+    </div>
+  </article>
+</Base>

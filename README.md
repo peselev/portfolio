@@ -1,43 +1,84 @@
-# Astro Starter Kit: Minimal
+# Portfolio Site
 
-```sh
-npm create astro@latest -- --template minimal
+Static portfolio site built with Astro and Tailwind. Deployed via Cloudflare Pages from GitHub.
+
+## Local development
+
+```bash
+npm install        # first time only
+npm run dev        # starts dev server at http://localhost:4321
+npm run build      # production build (outputs to ./dist)
+npm run preview    # preview production build locally
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Project structure
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+src/
+  content/projects/       — case studies (one .md or .mdx per case)
+  pages/
+    index.astro           — homepage
+    work/index.astro      — full work archive page
+    work/[slug].astro     — individual case study template
+    about.astro
+    resume.astro
+  components/             — reusable Astro components
+  layouts/Base.astro      — site-wide layout (nav, footer, meta tags)
+  styles/global.css       — Tailwind theme + Markdown prose styles
+public/
+  cv.pdf                  — downloadable resume (replace this file to update)
+  llms.txt                — LLM-readable site summary
+  robots.txt              — crawler permissions
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Common tasks
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Add a new case study
 
-Any static assets, like images, can be placed in the `public/` directory.
+1. Create `src/content/projects/your-slug.md` (or `.mdx` if you need components)
+2. Fill in the frontmatter (title, summary, company, role, period, order, tags, featured)
+3. Write the body in Markdown
+4. `git add . && git commit -m "Add case: your title" && git push`
+5. Cloudflare Pages rebuilds automatically (~30s)
 
-## 🧞 Commands
+The URL will be `/work/your-slug` based on the filename.
 
-All commands are run from the root of the project, from a terminal:
+### Edit an existing case study
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+1. Open `src/content/projects/whatever.md`
+2. Edit
+3. `git add . && git commit -m "Update case: whatever" && git push`
 
-## 👀 Want to learn more?
+### Replace the resume PDF
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Replace `public/cv.pdf` with the new file (keep the same filename)
+2. `git add . && git commit -m "Update resume" && git push`
+
+### Edit the homepage hero or about copy
+
+Open `src/pages/index.astro` or `src/pages/about.astro` and edit directly.
+
+## Frontmatter schema
+
+```yaml
+---
+title: "Case study title"
+summary: "1-2 sentence summary shown on home + case header"
+company: "Company name"
+role: "Your role"
+period: "2024 – 2025"
+order: 1                 # lower = appears first
+tags: ["Growth", "AI"]
+featured: true           # set false to hide from homepage but keep at /work/slug
+---
+```
+
+## Replace before going live
+
+Search and replace these placeholders:
+
+- `G-XXXXXXXXXX` in `src/layouts/Base.astro` — your GA4 measurement ID
+- `https://example.com` in `astro.config.mjs` and `public/llms.txt` — your real domain
+- `REPLACE` in `src/components/Footer.astro` — your LinkedIn and GitHub handles
+- `REPLACE_WITH_YOUR_HANDLE` in `src/layouts/Base.astro` — same
+- Cloudflare Web Analytics token (commented out in Base.astro) — after deploy

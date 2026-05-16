@@ -1,17 +1,87 @@
 ---
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
 
+const projects = (await getCollection("projects"))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base
+  title="Konstantin Peselev — Senior Product Manager"
+  description="Senior PM with 10+ years building B2B SaaS at Totango, Catalyst, and earlier as a co-founder. Specializing in Growth, Data Governance, and AI product strategy."
+>
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-6 pt-24 pb-20">
+    <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-5">
+      Senior Product Manager · 10+ years in SaaS
+    </p>
+    <h1 class="font-display text-5xl md:text-6xl font-semibold text-gray-900 tracking-tight leading-[1.05] mb-7 max-w-4xl">
+      Building products that turn complex problems into measurable outcomes.
+    </h1>
+    <p class="text-xl text-gray-600 leading-relaxed max-w-3xl mb-10">
+      Most recently leading Growth, Data Governance, and AI roadmaps at Totango (acquired Catalyst).
+      Previously co-founded a startup. MBA from NYU Stern. This is a selection of work I'm proud of.
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="#work"
+        class="bg-accent-700 hover:bg-accent-900 text-white font-medium px-6 py-3 rounded-lg transition-colors"
+      >
+        See selected work
+      </a>
+      <a
+        href="/resume"
+        class="border border-gray-300 hover:border-gray-900 text-gray-900 font-medium px-6 py-3 rounded-lg transition-colors"
+      >
+        Read résumé
+      </a>
+    </div>
+  </section>
+
+  <!-- About strip -->
+  <section class="border-y border-gray-200 bg-gray-50">
+    <div class="max-w-5xl mx-auto px-6 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Currently</p>
+          <p class="font-medium text-gray-900">Senior PM, Totango</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Focus areas</p>
+          <p class="font-medium text-gray-900">Growth · AI · Data Gov</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Experience</p>
+          <p class="font-medium text-gray-900">10+ years SaaS</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Education</p>
+          <p class="font-medium text-gray-900">MBA, NYU Stern</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work gallery -->
+  <section id="work" class="max-w-5xl mx-auto px-6 py-24">
+    <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-3">Selected work</p>
+    <h2 class="font-display text-3xl md:text-4xl font-semibold text-gray-900 mb-12 max-w-2xl">
+      Case studies from the last few years.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {projects.map((project) => (
+        <ProjectCard
+          href={`/work/${project.id}`}
+          title={project.data.title}
+          summary={project.data.summary}
+          role={project.data.role}
+          period={project.data.period}
+          tags={project.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</Base>
