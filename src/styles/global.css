@@ -104,11 +104,11 @@
     margin: 1.5rem 0;
   }
 
-  /* ---------- Tables ---------- */
+  /* ---------- Tables: font matches TOC (14px) ---------- */
   .prose-case table {
     width: 100%;
     margin: 1.5rem 0 2rem;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     line-height: 1.55;
     border-collapse: collapse;
     border: 1px solid theme(--color-gray-200);
@@ -118,7 +118,6 @@
   .prose-case thead {
     background: theme(--color-gray-50);
   }
-  /* Header row: tight padding, centered both axes */
   .prose-case th {
     text-align: center;
     vertical-align: middle;
@@ -129,7 +128,6 @@
     border-right: 1px solid theme(--color-gray-200);
   }
   .prose-case th:last-child { border-right: 0; }
-  /* Body cells: tight padding, left-aligned, top-aligned */
   .prose-case td {
     padding: 0.625rem 0.875rem;
     color: theme(--color-gray-700);
@@ -149,10 +147,6 @@
     border-radius: 0.5rem;
     border: 1px solid theme(--color-gray-200);
   }
-  /* Caption sits *flush* against the image: zero top margin.
-     The bottom margin on .image-caption provides space before next content.
-     We also kill the bottom margin on any <p> that wraps just an image
-     (MDX puts images inside <p>) — keeps the image hugging the caption. */
   .prose-case p:has(> img:only-child) {
     margin-bottom: 0;
   }

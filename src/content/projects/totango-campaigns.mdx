@@ -77,7 +77,7 @@ Partnering with engineers, we came up with three phased approach to the architec
 
   #### Old Flow (current)
 
-  ![old flow](/images/work/campaigns/architecture-old.jpg)
+  ![old flow](/images/work/campaigns/campaigns-01.jpg)
 
   The legacy architecture relied entirely on a single centralized service called "Ironman":
 
@@ -87,7 +87,7 @@ Partnering with engineers, we came up with three phased approach to the architec
 
   #### Phase 1
 
-  ![phase 1](/images/work/campaigns/architecture-phase-1.jpg)
+  ![phase 1](/images/work/campaigns/campaigns-02.jpg)
 
   The first phase initiates the decoupling process to address the workload spikes:
 
@@ -97,7 +97,7 @@ Partnering with engineers, we came up with three phased approach to the architec
 
   #### Phase 2
 
-  ![phase 2](/images/work/campaigns/architecture-phase-2.jpg)
+  ![phase 2](/images/work/campaigns/campaigns-03.jpg)
 
   Phase 2 further alleviates the processing burden on the legacy infrastructure:
 
@@ -106,7 +106,7 @@ Partnering with engineers, we came up with three phased approach to the architec
 
   #### Phase 3 (final)
 
-  ![phase 3](/images/work/campaigns/architecture-phase-3.jpg)
+  ![phase 3](/images/work/campaigns/campaigns-04.jpg)
 
   The final phase achieves the goal of a fully modernized architecture:
 
@@ -145,15 +145,15 @@ I partnered with one Enterprise customer to validate the use case, happy path, d
 
   Company "SaaSPro", a Totango subscriber, has Zendesk chat deployed on their website (saaspro.net - *I hope the domain is not owned by anyone, this is just an illustration of the point*). They send email campaigns, and want to add an additional channel to their messaging orchestration. They want to send messages that will be delivered to their website visitors chatbots.
 
-  ![Admin designs a chatbot campaign in Totango](/images/work/campaigns/chatbot-campaign-design.png)
+  ![Admin designs a chatbot campaign in Totango](/images/work/campaigns/campaigns-05.png)
   <Caption>1. Admin designs a chatbot campaign in Totango the same way they design a traditional email campaign</Caption>
 
-  ![Content editor for chatbot campaign](/images/work/campaigns/chatbot-content-editor.png)
+  ![Content editor for chatbot campaign](/images/work/campaigns/campaigns-06.png)
   <Caption>2. The content editor is the same WYSIWYG editor used in email campaigns (with some features that are not supported by Sunshine Conversation disabled)</Caption>
 
   After Chat Campaign is activated, the work within Totango is done. From a recipient perspective, they will get a personal message in the chatbot once they visit the saaspro.net website:
 
-  ![Chatbot recipient view](/images/work/campaigns/chatbot-recipient-view.png)
+  ![Chatbot recipient view](/images/work/campaigns/campaigns-07.png)
   <Caption>The top conversation was created automatically by Totango Campaign targeting this specific recipient when he visited the website (this is a demo showroom, not a real customer)</Caption>
 </details>
 
@@ -174,10 +174,10 @@ My research with the engineering team revealed that building true cross-object d
 
   After validating the solution with several customers I scoped and directed the team to built the Segment Table Component:
 
-  ![Segment Table editor](/images/work/campaigns/segment-table-editor.png)
+  ![Segment Table editor](/images/work/campaigns/campaigns-08.png)
   <Caption>User adds the component, the entire table is dynamic data - content will be defined at the moment of creating the message</Caption>
 
-  ![Segment Table output example](/images/work/campaigns/segment-table-output.png)
+  ![Segment Table output example](/images/work/campaigns/campaigns-09.png)
   <Caption>Here is an example of a single email notifying a recipient (Sally) about upcoming Renewals - each line in the table is a separate Company object in Totango (type Project) that satisfies two conditions: belongs to the same branch in the hierarchy tree as targeted user (Sally) and nearing the renewal date</Caption>
 </details>
 
