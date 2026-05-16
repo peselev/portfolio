@@ -118,18 +118,20 @@
   .prose-case thead {
     background: theme(--color-gray-50);
   }
+  /* Header row: tight padding, centered both axes */
   .prose-case th {
-    text-align: left;
+    text-align: center;
+    vertical-align: middle;
     font-weight: 600;
     color: theme(--color-gray-900);
-    padding: 0.875rem 1.25rem;
+    padding: 0.625rem 0.875rem;
     border-bottom: 1px solid theme(--color-gray-200);
     border-right: 1px solid theme(--color-gray-200);
-    vertical-align: middle; /* center header row content vertically */
   }
   .prose-case th:last-child { border-right: 0; }
+  /* Body cells: tight padding, left-aligned, top-aligned */
   .prose-case td {
-    padding: 1rem 1.25rem;
+    padding: 0.625rem 0.875rem;
     color: theme(--color-gray-700);
     border-bottom: 1px solid theme(--color-gray-200);
     border-right: 1px solid theme(--color-gray-200);
@@ -147,14 +149,20 @@
     border-radius: 0.5rem;
     border: 1px solid theme(--color-gray-200);
   }
-  /* Caption sits tight under image, then has its own bottom space */
+  /* Caption sits *flush* against the image: zero top margin.
+     The bottom margin on .image-caption provides space before next content.
+     We also kill the bottom margin on any <p> that wraps just an image
+     (MDX puts images inside <p>) — keeps the image hugging the caption. */
+  .prose-case p:has(> img:only-child) {
+    margin-bottom: 0;
+  }
   .prose-case .image-caption {
     display: block;
     text-align: center;
     color: theme(--color-gray-500);
     font-size: 0.875rem;
     line-height: 1.5;
-    margin-top: 0.25rem;
+    margin-top: 0;
     margin-bottom: 1.75rem;
     font-style: normal;
     font-family: var(--font-sans);

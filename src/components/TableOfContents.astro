@@ -1,6 +1,6 @@
 ---
-// Sticky sidebar TOC: H2 (top level) and H3 (nested, indented).
-// Highlights the active section as the user scrolls.
+// Sticky sidebar TOC: H2 (top level) and H3 (indented).
+// Active section highlights as user scrolls.
 ---
 
 <aside id="case-toc" class="hidden xl:block fixed right-8 top-32 w-56 z-30">
@@ -19,7 +19,12 @@
     const toc = document.getElementById("case-toc");
     if (!article || !nav || !toc) return;
 
-    const headings = article.querySelectorAll("h2, h3");
+    // Only top-level headings — exclude anything inside <details>
+    // (collapsed content shouldn't trigger active state)
+    const headings = Array.from(
+      article.querySelectorAll("h2, h3")
+    ).filter((h) => !h.closest("details")) as HTMLElement[];
+
     if (headings.length < 2) {
       toc.style.display = "none";
       return;
@@ -32,6 +37,8 @@
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-");
 
+    // Build TOC links
+    const links: HTMLAnchorElement[] = [];
     headings.forEach((h) => {
       if (!h.id) h.id = slugify(h.textContent || "");
       const link = document.createElement("a");
@@ -39,39 +46,53 @@
       link.textContent = h.textContent;
       const isH3 = h.tagName === "H3";
       link.className = [
-        "block py-1 leading-snug toc-link",
-        "text-gray-500 hover:text-gray-900 transition-colors",
+        "toc-link block py-1 leading-snug transition-colors",
         isH3 ? "pl-4 text-[0.8rem]" : "font-medium",
       ].join(" ");
       link.dataset.target = h.id;
+      // Default (inactive) color
+      link.style.color = "#6b7280"; // gray-500
       nav.appendChild(link);
+      links.push(link);
     });
 
-    // Don't observe headings inside <details> (collapsed by default — would
-    // create flickery active states for content the user can't see).
-    const observable = Array.from(headings).filter((h) => !h.closest("details"));
+    // Track currently active heading by index using scroll position.
+    // Approach: find the last heading whose top is above 1/3 of viewport.
+    const setActive = (activeId: string | null) => {
+      links.forEach((l) => {
+        if (l.dataset.target === activeId) {
+          l.style.color = "#4338ca"; // accent-700
+        } else {
+          l.style.color = "#6b7280"; // gray-500
+        }
+      });
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const id = (entry.target as HTMLElement).id;
-          const link = nav.querySelector(`[data-target="${id}"]`);
-          if (!link) return;
-          if (entry.isIntersecting) {
-            nav
-              .querySelectorAll(".toc-link")
-              .forEach((l) => l.classList.remove("text-accent-700", "font-medium"));
-            // Re-apply font-medium for H2s after clearing
-            nav.querySelectorAll(".toc-link").forEach((l) => {
-              if (!l.classList.contains("pl-4")) l.classList.add("font-medium");
-            });
-            link.classList.add("text-accent-700");
-            if (!link.classList.contains("pl-4")) link.classList.add("font-medium");
-          }
+    const onScroll = () => {
+      const threshold = window.innerHeight * 0.33;
+      let activeId: string | null = headings[0].id;
+      for (const h of headings) {
+        const rect = h.getBoundingClientRect();
+        if (rect.top <= threshold) {
+          activeId = h.id;
+        } else {
+          break;
+        }
+      }
+      setActive(activeId);
+    };
+
+    // Throttle scroll via rAF
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          onScroll();
+          ticking = false;
         });
-      },
-      { rootMargin: "-20% 0px -70% 0px" }
-    );
-    observable.forEach((h) => observer.observe(h));
+        ticking = true;
+      }
+    });
+    onScroll(); // initial state
   });
 </script>

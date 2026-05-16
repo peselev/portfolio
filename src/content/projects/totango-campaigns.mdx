@@ -67,8 +67,9 @@ After getting the approval, I came up with the following plan:
 Partnering with engineers, we came up with three phased approach to the architecture overhaul.
 
 <UserStory label="User Stories">
-  - As a User, I want to activate Campaigns that targets a large set (x100,000's) of recipients, which should be processed at maximum within 15 minutes after picking up from the queue.
-  - As a Reliability Engineer, I need the Campaigns infrastructure to seamlessly absorb sudden workload spikes, so that overall platform stability and downstream services remain unaffected during peak enterprise usage.
+  As a User, I want to activate Campaigns that targets a large set (x100,000's) of recipients, which should be processed at maximum within 15 minutes after picking up from the queue.
+
+  As a Reliability Engineer, I need the Campaigns infrastructure to seamlessly absorb sudden workload spikes, so that overall platform stability and downstream services remain unaffected during peak enterprise usage.
 </UserStory>
 
 <details>
@@ -163,7 +164,7 @@ Campaigns allow using dynamic data - company or user attributes such as `{First 
 The major limitation was the data silos: it's only possible to use data from Targeted User object, or the Company object that is linked to the Targeted User. With most enterprise customers having multi-level data hierarchy, this created a major obstacle from capitalizing on the data Totango contains.
 
 <UserStory>
-  - As a User I want send one email that contains dynamic data from objects outside targeted user or targeted company, so that I can share all relevant information at once instead of targeting the same recipient multiple times and sending a new email every time.
+  As a User I want send one email that contains dynamic data from objects outside targeted user or targeted company, so that I can share all relevant information at once instead of targeting the same recipient multiple times and sending a new email every time.
 </UserStory>
 
 My research with the engineering team revealed that building true cross-object data access was technically not feasible. Rather than abandoning the feature, I partnered with the Design team and identified a high-ROI trade-off: designing a solution that restricted data retrieval to the user's immediate hierarchy tree ('siblings', 'parents', and 'children') with predefined object type. This pivot transformed a massive engineering lift into a manageable task, successfully enabling the most critical enterprise use cases within our existing tech constraints.
@@ -190,17 +191,11 @@ All initiatives were successfully deployed, and outperformed the goals the team 
   { value: "+33%", label: "ARR from one expansion", detail: "Influenced by chatbot capability" }
 ]} />
 
-### Architecture Overhaul
+**Architecture Overhaul.** Stage 3 was deployed according to the original timeline. Workload tests passed: several campaigns targeting 500,000 recipients were activated simultaneously, the server correctly increased the bandwidth to process it on time (within 15 minutes requirement). Within first 4 weeks after deployment, all top 10 customers reported to their respective CSMs they see noticeable improvement in stability of the service. 4 major customers sent personalized messages praising they now don't need to split large campaigns into multiple clones. Support team triaged all bugs that were put on hold and linked to the architecture bottlenecks: 71.7% were closed as they couldn't be reproduced anymore.
 
-Stage 3 was deployed according to the original timeline. Workload tests passed: several campaigns targeting 500,000 recipients were activated simultaneously, the server correctly increased the bandwidth to process it on time (within 15 minutes requirement). Within first 4 weeks after deployment, all top 10 customers reported to their respective CSMs they see noticeable improvement in stability of the service. 4 major customers sent personalized messages praising they now don't need to split large campaigns into multiple clones. Support team triaged all bugs that were put on hold and linked to the architecture bottlenecks: 71.7% were closed as they couldn't be reproduced anymore.
+**Multi-Channel Campaigns.** The main design partner adopted the feature immediately, and launched multiple chatbot campaigns within the first 4 weeks after the deployment. Totango CS team was able to capitalize on the positive sentiment, and secured a major expansion deal (+33% of ARR). Two prospective deals (potentially top 12 and top 9 in ARR) were successfully closed due to demonstrated capability of integrating with their chatbots.
 
-### Multi-Channel Campaigns
-
-The main design partner adopted the feature immediately, and launched multiple chatbot campaigns within the first 4 weeks after the deployment. Totango CS team was able to capitalize on the positive sentiment, and secured a major expansion deal (+33% of ARR). Two prospective deals (potentially top 12 and top 9 in ARR) were successfully closed due to demonstrated capability of integrating with their chatbots.
-
-### Advanced Dynamic Data
-
-Our top 3 customer adopted the solution one week **before** it was released for General Availability, and immediately went from Churn Risk to securing renewal, and went into discussions of expansion within three weeks. Within the first four weeks after the release, 16 out of top 20 customers had designed and launched campaigns that used Advanced Dynamic Data. Solution and Implementation team received two personal emails from critical customers, praising the newly released feature, and the use cases it unlocked.
+**Advanced Dynamic Data.** Our top 3 customer adopted the solution one week **before** it was released for General Availability, and immediately went from Churn Risk to securing renewal, and went into discussions of expansion within three weeks. Within the first four weeks after the release, 16 out of top 20 customers had designed and launched campaigns that used Advanced Dynamic Data. Solution and Implementation team received two personal emails from critical customers, praising the newly released feature, and the use cases it unlocked.
 
 ## Key Takeaways
 
