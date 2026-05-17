@@ -80,6 +80,9 @@
   .prose-case ul { list-style-type: disc; }
   .prose-case ol { list-style-type: decimal; }
   .prose-case li { margin-bottom: 0.5rem; }
+  .prose-case .section-break {
+    height: 3rem;
+  }
   .prose-case a {
     color: theme(--color-accent-700);
     text-decoration: underline;
@@ -104,8 +107,8 @@
     font-family: var(--font-mono);
   }
   .prose-case pre {
-    background: #f7f6f3;
-    border: 1px solid #e9e8e3;
+    background: #faf6ed;
+    border: 1px solid #ebe3d0;
     border-radius: 0.5rem;
     padding: 1rem 1.25rem;
     margin: 1.25rem 0;
@@ -118,8 +121,9 @@
     padding: 0;
     border-radius: 0;
     font-size: inherit;
-    color: #1f2937;
+    color: #0a0a0a;
     white-space: pre;
+    font-weight: 500;
   }
   .prose-case blockquote {
     border-left: 3px solid theme(--color-accent-700);

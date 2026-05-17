@@ -12,16 +12,18 @@ featured: true
 import UserStory from "../../components/UserStory.astro";
 import Quote from "../../components/Quote.astro";
 import Video from "../../components/Video.astro";
+import MetricGrid from "../../components/MetricGrid.astro";
+import Caption from "../../components/Caption.astro";
 
 ## Summary
 
 Led Totango's first wave of LLM features in 2023, establishing the company as an approved AI vendor across its enterprise base and laying the foundation for Unison, a standalone AI product. Took five LLM bets from prototype to production decision:
 
-- **Shipped — Account Summary**: a one-click synthesis of every integrated data source for a customer account
-- **Shipped — Data Integration Filter Builder**: a plain-English to query translator for Salesforce and MS Dynamics setup
-- **Shipped — Content Creator**: an embedded AI writing assistant for touchpoints, tasks, and campaign templates
-- **Shelved — Totango Copilot**: a conversational interface for goal-driven actions inside Totango
-- **Shelved — Segment Creator**: plain-English to Totango query, the capability Copilot depended on
+- **Account Summary**: a one-click synthesis of every integrated data source for a customer account
+- **Data Integration Filter Builder**: a plain-English to query translator for Salesforce and MS Dynamics setup
+- **Content Creator**: an embedded AI writing assistant for touchpoints, tasks, and campaign templates
+- **Totango Copilot (shelved)**: a conversational interface for goal-driven actions inside Totango
+- **Segment Creator (shelved)**: plain-English to Totango query, the capability Copilot depended on
 
 Structured the work as parallel cheap bets with a V1 bar that required reliability on messy production data rather than clean demos, and owned the AI PM stack end-to-end: prompt engineering, eval design, dynamic modular prompts that adapted to each customer's schema without retraining, and GTM through closed beta with waitlist and high-touch enterprise onboarding.
 
@@ -113,13 +115,38 @@ Totango admins setting up inbound integrations from Salesforce or MS Dynamics ha
 
 The feature let admins describe what they needed in plain English and returned a suggested query they could verify before saving. It shipped at POC level and went to V1 with no significant changes since the accuracy held on real schemas, and the scope didn't grow.
 
+<details>
+  <summary>User flow</summary>
+
+  Admins selected the object and fields they wanted to pull from, then described their target records in natural language. The model translated the description into a valid query that the admin could review, edit, or save directly.
+
+  ![Filter Builder prompt input with object fields selected](/images/work/ai-labs/ai-labs-04.png)
+  <Caption>Admin selects the object and fields, then describes the filter in plain English</Caption>
+
+  ![Filter Builder generated query output](/images/work/ai-labs/ai-labs-05.png)
+  <Caption>The model converts the description into a valid Salesforce query</Caption>
+</details>
+
 ### Content Creator
 
 Content Creator applied LLMs to Totango-specific writing tasks: touchpoints, tasks, and email campaign templates. The use cases were the popular and familiar applications of LLM tools: overcoming writer's block, polishing drafts, enforcing tone and style.
 
 What I underestimated going in was how much value an embedded assistant carried for enterprise users specifically. Many enterprises ban external AI writing tools at the security policy level: Grammarly, Microsoft Copilot, Gemini are unavailable inside the corporate environment. For users drafting customer communications inside Totango, particularly non-native English speakers, a built-in assistant that could take rough notes and return polished, on-brand text filled a real daily need we hadn't fully anticipated.
 
+<details>
+  <summary>User flow</summary>
+
+  Users worked inside the standard content editor for campaigns, touchpoints, or tasks. Opening the AI Content Generator let them describe what they needed in their own words — a brief, a meeting summary, an outreach — and the assistant returned a draft they could refine and send.
+
+  ![Content Creator prompt input](/images/work/ai-labs/ai-labs-06.png)
+  <Caption>User describes the content in plain language inside the prompt box</Caption>
+
+  <Video src="/images/work/ai-labs/ai-labs-07.mp4" />
+</details>
+
 Expanding the feature further (for example, generating full campaign sequences from a prompt, creating downstream tasks from touchpoint content) was technically achievable, but at 2023 model accuracy levels, the investment outweighed the gains. We shipped at POC and held there.
+
+<div class="section-break" />
 
 Two prototypes were stopped before they consumed serious engineering time. Both made it through the prototype gate, both failed the V1 bar. And shelving them was, in retrospect, as valuable as shipping the others.
 
@@ -194,6 +221,12 @@ The decisive problem was Copilot's asymmetric risk profile. Every successful act
 The value-per-action ratio was too skewed to justify the precision the system would have needed to clear the V1 bar.
 
 ## Impact & Outcomes
+
+<MetricGrid metrics={[
+  { value: "80%+", label: "Customer adoption", detail: "First quarter after GA" },
+  { value: "9 of 10", label: "Top customers activated", detail: "By contract size" },
+  { value: "5/day", label: "Power user average", detail: "As part of pre-call routine" }
+]} />
 
 Within the first quarter after general availability, over 80% of Totango's customers had used the Executive Account Summary at least once. 9 of the 10 largest customers by contract size activated the feature. Power users averaged 5 summaries per day, not as a directed behavior but as a natural part of their pre-call routine. Ten enterprise customers joined as post-GA design partners, continuing to shape the prompt after launch.
 
