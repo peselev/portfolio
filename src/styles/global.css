@@ -107,6 +107,7 @@
     font-family: var(--font-mono);
   }
   .prose-case pre {
+    background: #f6f8fa;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
     padding: 1rem 1.25rem;
