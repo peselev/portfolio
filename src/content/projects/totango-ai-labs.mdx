@@ -73,7 +73,7 @@ Five ideas cleared into Prototype from the broader brainstorming pool. Three of 
 The Account Summary was the feature where the depth of the problem matched what the technology could do and where the value held even when the output wasn't perfect, as long as it was honest.
 
 Customer Success Managers were sitting on accounts with hundreds of data points: health scores, engagement trends, product usage, open tickets, renewal dates, CSM sentiment, NPS history. Before a customer call, a QBR, or an executive briefing, synthesizing that into a coherent picture meant either spending 20–30 minutes manually pulling it together or going in underprepared.
-
+<br />
 The Account Summary automated the synthesis: a one-click summary returned in seconds, drawing on every integrated data source (thus incentivizing customers to integrate as many data sources as possible — the more systems a customer had connected and the longer the data history, the sharper the analysis got). Admins could tailor the summary's focus to fit different user needs: a CSM, an exec, and a renewal lead would each see what mattered to them.
 
 <UserStory label="User Stories">
@@ -94,15 +94,15 @@ The build had three parallel tracks:
 - how dependably they flagged contradictions embedded in the data (for example, usage trending down while an expansion deal was being signed, or a high CSAT score sitting alongside falling weekly active users).
 
 The eval dataset grew as more customers used the feature, which improved prompt iterations, which improved output quality.
-
+<br />
 It's important to note that Totango never trained models on customer data. What fed the eval set was our own production and synthetic data, and examples that design partners explicitly shared with us for that purpose.
 
 **Customization architecture.** Totango customers vary widely in how they structure their data: different attributes, naming conventions, business contexts. A static prompt would have produced summaries that were generic at best and misleading at worst. The solution was a dynamic prompt architecture: admins could configure which data points fed into the summary and exclude attributes that confused the model. The dynamic modular approach proved effective on every dimension that mattered: it made the system deeply sensitive to each customer's context and business goals, it required no model retraining or deployment for tuning, and it stayed fast because it didn't need RAG infrastructure underneath.
 
 **Security and data integrity.** Successful adoption required solving two fundamental problems: protecting sensitive data, and preventing hallucinations.
-
+<br />
 Enterprise customers had hard limits on what could be sent to a subprocessor: their book of business, contract details, PII of their counterparts. After working through options with the data science team, I landed on a hashing approach: sensitive identifiers, including PII and business-sensitive attributes such as company names, were obfuscated before leaving Totango's infrastructure, and unmasked after the response came back.
-
+<br />
 On hallucinations I worked to build a verification logic that cross-checked the model's output against the source data, catching cases where the model confidently stated something that the underlying data didn't support.
 
 Once the three tracks converged, the feature launched as an opt-in closed beta with a waitlist, then moved to GA. Post-GA, I ran a high-touch onboarding program for enterprise customers: running live demos, presenting to customers' security and compliance committees, navigating data governance concerns, and working with design partners to continue refining the prompt after release.

@@ -107,8 +107,7 @@
     font-family: var(--font-mono);
   }
   .prose-case pre {
-    background: #faf6ed;
-    border: 1px solid #ebe3d0;
+    border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
     padding: 1rem 1.25rem;
     margin: 1.25rem 0;
@@ -116,14 +115,15 @@
     font-size: 0.8125rem;
     line-height: 1.6;
   }
+  /* Shiki sets inline background and per-token colors on <pre> and spans.
+     We only override what won't conflict. */
   .prose-case pre code {
     background: transparent;
     padding: 0;
     border-radius: 0;
     font-size: inherit;
-    color: #0a0a0a;
-    white-space: pre;
-    font-weight: 500;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
   .prose-case blockquote {
     border-left: 3px solid theme(--color-accent-700);
