@@ -104,8 +104,8 @@
     font-family: var(--font-mono);
   }
   .prose-case pre {
-    background: theme(--color-gray-50);
-    border: 1px solid theme(--color-gray-200);
+    background: #f7f6f3;
+    border: 1px solid #e9e8e3;
     border-radius: 0.5rem;
     padding: 1rem 1.25rem;
     margin: 1.25rem 0;
@@ -118,7 +118,7 @@
     padding: 0;
     border-radius: 0;
     font-size: inherit;
-    color: theme(--color-gray-800);
+    color: #1f2937;
     white-space: pre;
   }
   .prose-case blockquote {

@@ -1,6 +1,6 @@
 ---
 title: "AI Labs"
-summary: "Applying LLM to deliver value"
+summary: "Led Totango's first wave of LLM features and the path to enterprise AI adoption"
 company: "Totango"
 role: "Senior Product Manager"
 period: "2023 – 2024"
@@ -11,11 +11,23 @@ featured: true
 
 import UserStory from "../../components/UserStory.astro";
 import Quote from "../../components/Quote.astro";
-import MutedGif from "../../components/MutedGif.astro";
+import Video from "../../components/Video.astro";
 
 ## Summary
 
-Led Totango's first wave of LLM features in 2023, establishing the company as an approved AI vendor across its enterprise base and laying the foundation for Unison, a standalone AI product. Took four LLM features from prototype to production: Account Summary (a one-click synthesis of every integrated data source for a customer account) and the Data Integration Filter Builder (a plain-English to query translator for Salesforce and MS Dynamics setup) shipped, while Totango Copilot and its underlying Segment Creator were shelved at POC. Structured the work as parallel cheap bets with a V1 bar that required reliability on messy production data rather than clean demos, and owned the AI PM stack end-to-end: prompt engineering, eval design, dynamic modular prompts that adapted to each customer's schema without retraining, and GTM through closed beta with waitlist and high-touch enterprise onboarding. Solved the two blockers to enterprise adoption: protecting PII (hashing sensitive data before it left Totango's infrastructure) and catching hallucinations (verification logic against source data). Within one quarter of GA, 80%+ of customers had adopted Account Summary, including 9 of the 10 largest by contract. Power users averaged 5 summaries per day as part of their pre-call routine. The signed AI data-usage agreements let Unison's GTM skip the security-and-legal hurdle that typically gates enterprise AI deals.
+Led Totango's first wave of LLM features in 2023, establishing the company as an approved AI vendor across its enterprise base and laying the foundation for Unison, a standalone AI product. Took five LLM bets from prototype to production decision:
+
+- **Shipped — Account Summary**: a one-click synthesis of every integrated data source for a customer account
+- **Shipped — Data Integration Filter Builder**: a plain-English to query translator for Salesforce and MS Dynamics setup
+- **Shipped — Content Creator**: an embedded AI writing assistant for touchpoints, tasks, and campaign templates
+- **Shelved — Totango Copilot**: a conversational interface for goal-driven actions inside Totango
+- **Shelved — Segment Creator**: plain-English to Totango query, the capability Copilot depended on
+
+Structured the work as parallel cheap bets with a V1 bar that required reliability on messy production data rather than clean demos, and owned the AI PM stack end-to-end: prompt engineering, eval design, dynamic modular prompts that adapted to each customer's schema without retraining, and GTM through closed beta with waitlist and high-touch enterprise onboarding.
+
+Solved the two blockers to enterprise adoption: protecting PII (hashing sensitive data before it left Totango's infrastructure) and catching hallucinations (verification logic against source data).
+
+Within one quarter of GA, 80%+ of customers had adopted Account Summary, including 9 of the 10 largest by contract. Power users averaged 5 summaries per day as part of their pre-call routine. The signed AI data-usage agreements let Unison's GTM skip the security-and-legal hurdle that typically gates enterprise AI deals.
 
 ## The Context & Problem Space
 
@@ -50,7 +62,7 @@ I set up three stages for every idea:
 
 We'd already seen the pattern internally: prototypes that performed well on clean test data lost their value the moment we pointed them at a customer's actual production environment. A lot of AI features at the time created an easy wow effect in demos, only to fall apart under real schemas. Demo-quality wasn't enough; the goal was features customers would trust and add into their daily toolkit, not features they'd be impressed by once.
 
-Four ideas cleared into Prototype from the broader brainstorming pool. Two of them shipped, two were shelved before they consumed serious engineering time.
+Five ideas cleared into Prototype from the broader brainstorming pool. Three of them shipped, two were shelved before they consumed serious engineering time.
 
 ## Execution
 
@@ -109,19 +121,13 @@ What I underestimated going in was how much value an embedded assistant carried 
 
 Expanding the feature further (for example, generating full campaign sequences from a prompt, creating downstream tasks from touchpoint content) was technically achievable, but at 2023 model accuracy levels, the investment outweighed the gains. We shipped at POC and held there.
 
-### What was shelved: Copilot and Segment Creator
-
 Two prototypes were stopped before they consumed serious engineering time. Both made it through the prototype gate, both failed the V1 bar. And shelving them was, in retrospect, as valuable as shipping the others.
 
-#### Totango Copilot
+### Totango Copilot (shelved)
 
 The Copilot was the moonshot: a conversational interface where users could describe a goal in plain English, receive a suggested action plan, and approve its execution without navigating Totango's UI.
 
-![Totango AI Copilot automatic demo](/images/work/ai-labs/ai-labs-02.gif)
-
-<MutedGif src="/images/work/ai-labs/ai-labs-02.gif" alt="Totango AI Copilot automatic demo, smaller">
-  Same GIF, ~40% width and reduced opacity (alternative size for comparison)
-</MutedGif>
+<Video src="/images/work/ai-labs/ai-labs-02.mp4" />
 
 The value comes from flexibility. A conversational interface is general-purpose by nature, and the range of things users could ask for was open-ended. A few themes anchored the vision:
 
@@ -168,17 +174,13 @@ Behind the interface, the architecture had to do real work: route intent, and ho
 
 The vision was to extend this into suggested actions and recommendations. Empowering every Totango customer with an embedded AI CSM working alongside them.
 
-#### Segment Creator
+### Segment Creator (shelved)
 
 The Copilot's core depended on the Segment Creator: the ability to translate plain English into valid Totango filter queries. Without it, the system couldn't construct the account lists that almost every downstream Copilot action required.
 
 The capability looked impressive on clean demo data, the Segment Creator translated plain-English requests into valid Totango queries in real time:
 
-![Totango AI Copilot segment generation demo](/images/work/ai-labs/ai-labs-03.gif)
-
-<MutedGif src="/images/work/ai-labs/ai-labs-03.gif" alt="Totango AI Copilot segment generation demo, smaller">
-  Same GIF, ~40% width and reduced opacity (alternative size for comparison)
-</MutedGif>
+<Video src="/images/work/ai-labs/ai-labs-03.mp4" />
 
 However, once applied to production data, accuracy collapsed.
 
@@ -195,17 +197,21 @@ The value-per-action ratio was too skewed to justify the precision the system wo
 
 Within the first quarter after general availability, over 80% of Totango's customers had used the Executive Account Summary at least once. 9 of the 10 largest customers by contract size activated the feature. Power users averaged 5 summaries per day, not as a directed behavior but as a natural part of their pre-call routine. Ten enterprise customers joined as post-GA design partners, continuing to shape the prompt after launch.
 
-<Quote attribution="Kirsten Bardwell, Customer Success Operations Manager, Convoso">
-  My boss was like, "What? This is amazing!"
-</Quote>
+<details>
+  <summary>What customers said</summary>
 
-<Quote attribution="Jeanne Cox, Global Customer Success Marketing Manager, Schneider Electric">
-  I was really impressed with this feature! We have some work to do on our Key Info page to make it more impactful, but with time, I know we can make this feature something we use daily.
-</Quote>
+  <Quote attribution="Kirsten Bardwell, Customer Success Operations Manager, Convoso">
+    My boss was like, "What? This is amazing!"
+  </Quote>
 
-<Quote attribution="Brett Wrenn, Global Director of Customer Success, Carbyne">
-  I was very impressed with your v1 implementation of this feature. It also helped to identify gaps in our data which we've known exist, but it gives us a purpose to close those gaps so that we can benefit from the Account Summary feature's full potential.
-</Quote>
+  <Quote attribution="Jeanne Cox, Global Customer Success Marketing Manager, Schneider Electric">
+    I was really impressed with this feature! We have some work to do on our Key Info page to make it more impactful, but with time, I know we can make this feature something we use daily.
+  </Quote>
+
+  <Quote attribution="Brett Wrenn, Global Director of Customer Success, Carbyne">
+    I was very impressed with your v1 implementation of this feature. It also helped to identify gaps in our data which we've known exist, but it gives us a purpose to close those gaps so that we can benefit from the Account Summary feature's full potential.
+  </Quote>
+</details>
 
 The feature created an incentive for enterprise customers to clean up their own data that direct pressure from Totango hadn't produced over years of asking. Two quarters after one of Totango's top three customers adopted Account Summary, a chronic system performance issue quietly resolved — a side effect of the customer cleaning their own data to get sharper summaries.
 
@@ -213,7 +219,7 @@ Account Summary established Totango as an approved AI vendor across a significan
 
 ## Key Takeaways
 
-**AI demo is a sales pitch, not a product.** Almost any AI feature can be made to look impressive on clean demo data. What matters is whether the system holds up against real customer schemas, half-populated fields, conflicting naming conventions, and business context the model has no way to infer. Two of the four prototypes in this project failed that test, and recognizing it early was what kept the cost of being wrong low. I now treat demo performance as a green light to invest in production validation, nothing more.
+**AI demo is a sales pitch, not a product.** Almost any AI feature can be made to look impressive on clean demo data. What matters is whether the system holds up against real customer schemas, half-populated fields, conflicting naming conventions, and business context the model has no way to infer. Two of the five prototypes in this project failed that test, and recognizing it early was what kept the cost of being wrong low. I now treat demo performance as a green light to invest in production validation, nothing more.
 
 **Enterprises don't need magic, they need value.** The summaries that generated the strongest customer reactions were often straightforward by technical standards. They were valuable because they eliminated a real daily pain for users. In some cases a feature needs to be nearly perfect to be useful. But in this case customers didn't need a flawless output, just freedom from doing the work manually.
 

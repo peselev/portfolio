@@ -1,0 +1,40 @@
+---
+export interface Props {
+  src: string;
+  poster?: string;
+  caption?: string;
+}
+
+const { src, poster, caption } = Astro.props;
+---
+
+<figure class="case-video">
+  <video controls preload="metadata" playsinline poster={poster} muted loop>
+    <source src={src} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .case-video {
+    margin: 1.75rem 0;
+  }
+  .case-video video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+  }
+  .case-video figcaption {
+    display: block;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    font-family: var(--font-sans);
+  }
+</style>
