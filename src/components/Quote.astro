@@ -1,0 +1,36 @@
+---
+export interface Props {
+  attribution?: string;
+}
+
+const { attribution } = Astro.props;
+---
+
+<blockquote class="border-l-2 border-gray-300 pl-5 my-5 text-gray-600 quote-block">
+  <div class="text-base leading-relaxed">
+    <slot />
+  </div>
+  {attribution && (
+    <p class="text-sm text-gray-500 mt-2">— {attribution}</p>
+  )}
+</blockquote>
+
+<style is:global>
+  /* Override prose-case blockquote styling for our Quote component */
+  .prose-case blockquote.quote-block {
+    border-left-width: 2px;
+    border-color: #d1d5db; /* gray-300 */
+    padding-left: 1.25rem;
+    font-style: normal;
+    color: #4b5563; /* gray-600 */
+    margin: 1.25rem 0;
+  }
+  .prose-case .quote-block > div > p {
+    margin-bottom: 0;
+    color: inherit;
+    font-style: normal;
+  }
+  .prose-case .quote-block > p:last-child {
+    margin-bottom: 0;
+  }
+</style>

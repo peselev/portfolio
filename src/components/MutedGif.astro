@@ -1,0 +1,38 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<figure class="muted-gif">
+  <img src={src} alt={alt} />
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style>
+  .muted-gif {
+    margin: 1.75rem 0;
+    text-align: center;
+  }
+  .muted-gif img {
+    max-width: 40%;
+    height: auto;
+    opacity: 0.85;
+    margin: 0 auto;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    display: inline-block;
+  }
+  .muted-gif figcaption {
+    display: block;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.25rem;
+    font-family: var(--font-sans);
+  }
+</style>
