@@ -136,12 +136,12 @@ What I underestimated going in was how much value an embedded assistant carried 
 <details>
   <summary>User flow</summary>
 
-  Users worked inside the standard content editor for campaigns, touchpoints, or tasks. Opening the AI Content Generator let them describe what they needed in their own words — a brief, a meeting summary, an outreach — and the assistant returned a draft they could refine and send.
+  Users worked inside the standard content editor for campaigns, touchpoints, or tasks. Opening the AI Content Generator let them describe what they needed in their own words: a brief, a meeting summary, an outreach. The assistant returned a draft they could refine and send.
 
   ![Content Creator prompt input](/images/work/ai-labs/ai-labs-06.png)
   <Caption>User describes the content in plain language inside the prompt box</Caption>
 
-  <Video src="/images/work/ai-labs/ai-labs-07.mp4" />
+  <Video src="/images/work/ai-labs/ai-labs-07.mp4" caption="The assistant returns a structured draft seconds later" />
 </details>
 
 Expanding the feature further (for example, generating full campaign sequences from a prompt, creating downstream tasks from touchpoint content) was technically achievable, but at 2023 model accuracy levels, the investment outweighed the gains. We shipped at POC and held there.
@@ -222,13 +222,15 @@ The value-per-action ratio was too skewed to justify the precision the system wo
 
 ## Impact & Outcomes
 
+Of the three shipped features, Account Summary was the one with measurable enterprise impact. The metrics below are Account Summary specific.
+
 <MetricGrid metrics={[
-  { value: "80%+", label: "Customer adoption", detail: "First quarter after GA" },
-  { value: "9 of 10", label: "Top customers activated", detail: "By contract size" },
-  { value: "5/day", label: "Power user average", detail: "As part of pre-call routine" }
+  { value: "80%", label: "Customer adoption", detail: "of total paid customers, within first quarter of GA" },
+  { value: "9 of 10", label: "Top customers (by ARR)", detail: "generated summaries weekly" },
+  { value: "5/day", label: "Summaries generated", detail: "on average by power users" }
 ]} />
 
-Within the first quarter after general availability, over 80% of Totango's customers had used the Executive Account Summary at least once. 9 of the 10 largest customers by contract size activated the feature. Power users averaged 5 summaries per day, not as a directed behavior but as a natural part of their pre-call routine. Ten enterprise customers joined as post-GA design partners, continuing to shape the prompt after launch.
+Within the first quarter after general availability, over 80% of Totango's customers were generating Executive Account Summaries. 9 of the 10 largest customers by contract size activated the feature. Power users averaged 5 summaries per day, not as a directed behavior but as a natural part of their pre-call routine. Ten enterprise customers joined as post-GA design partners, continuing to shape the prompt after launch.
 
 <details>
   <summary>What customers said</summary>

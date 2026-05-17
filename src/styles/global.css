@@ -200,7 +200,7 @@
     background: #ffffff;
   }
   details[open] {
-    background: theme(--color-gray-50);
+    background: #ffffff;
   }
   summary {
     cursor: pointer;
