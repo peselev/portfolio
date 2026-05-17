@@ -11,7 +11,7 @@ const { label } = Astro.props;
   <pre class="case-prompt-body"><slot /></pre>
 </div>
 
-<style>
+<style is:global>
   .case-prompt {
     background: #f6f8fa;
     border: 1px solid #e5e7eb;
@@ -28,15 +28,24 @@ const { label } = Astro.props;
     margin: 0 0 0.5rem 0;
   }
   .case-prompt-body {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    line-height: 1.6;
-    color: #111827;
     background: transparent;
     border: none;
     padding: 0;
     margin: 0;
+    font-family: var(--font-mono);
+    color: #111827;
     white-space: pre-wrap;
     word-break: break-word;
+  }
+  /* MDX wraps slot content in <p>, so target whatever lives inside <pre>.
+     Reset prose-case paragraph styles and apply Prompt sizing. */
+  .case-prompt-body p,
+  .case-prompt-body * {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: #111827;
+    margin: 0;
+    padding: 0;
   }
 </style>
