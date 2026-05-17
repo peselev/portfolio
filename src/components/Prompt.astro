@@ -1,0 +1,42 @@
+---
+export interface Props {
+  label?: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="case-prompt">
+  {label && <p class="case-prompt-label">{label}</p>}
+  <pre class="case-prompt-body"><slot /></pre>
+</div>
+
+<style>
+  .case-prompt {
+    background: #f6f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .case-prompt-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+  }
+  .case-prompt-body {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: #111827;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+</style>
