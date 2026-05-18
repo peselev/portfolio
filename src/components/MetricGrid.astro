@@ -3,6 +3,8 @@ export interface Metric {
   value: string;
   label: string;
   detail?: string;
+  /** Optional Tailwind text-size class (e.g. "text-3xl", "text-2xl") to override the default 4xl value size. */
+  valueSize?: string;
 }
 
 export interface Props {
@@ -10,14 +12,34 @@ export interface Props {
 }
 
 const { metrics } = Astro.props;
+const count = metrics.length;
 ---
 
-<div class="flex flex-wrap justify-center gap-6 my-10">
+<div
+  class="metric-grid my-10"
+  style={`--metric-count: ${count};`}
+>
   {metrics.map((m) => (
-    <div class="flex-1 min-w-[200px] max-w-[360px] border border-gray-200 rounded-xl p-6 bg-white">
-      <p class="font-display text-4xl font-semibold text-accent-700 tracking-tight whitespace-nowrap">{m.value}</p>
+    <div class="border border-gray-200 rounded-xl p-6 bg-white">
+      <p class:list={[
+        "font-display font-semibold text-accent-700 tracking-tight",
+        m.valueSize ?? "text-4xl"
+      ]}>{m.value}</p>
       <p class="text-sm font-medium text-gray-900 mt-2">{m.label}</p>
       {m.detail && <p class="text-sm text-gray-600 mt-1">{m.detail}</p>}
     </div>
   ))}
 </div>
+
+<style>
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--metric-count), minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  @media (max-width: 640px) {
+    .metric-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
