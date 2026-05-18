@@ -114,7 +114,7 @@
     margin: 1.5rem 0;
   }
 
-  /* ---------- Tables: font matches TOC (14px) ---------- */
+  /* ---------- Tables ---------- */
   .prose-case table {
     width: 100%;
     margin: 1.5rem 0 2rem;
@@ -157,7 +157,14 @@
     border-radius: 0.5rem;
     border: 1px solid theme(--color-gray-200);
   }
+  /* Image-wrapping paragraph: default gives bottom space (for images without captions).
+     When the next sibling is a caption, we'll override to 0 below. */
   .prose-case p:has(> img:only-child) {
+    margin-bottom: 1.75rem;
+  }
+  /* Override: when the image-paragraph is immediately followed by a caption,
+     collapse the bottom gap so the caption can sit flush against the image. */
+  .prose-case p:has(> img:only-child):has(+ p.image-caption) {
     margin-bottom: 0;
   }
   .prose-case .image-caption {

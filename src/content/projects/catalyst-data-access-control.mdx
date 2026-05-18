@@ -83,13 +83,13 @@ To pressure-test the architecture against those requirements, I facilitated a se
 ### Feature Permissions
 
 <UserStory label="User Stories">
-  As an admin at a security-conscious company, I need to control who can export customer data out of Catalyst, so that I can comply with my company's data policies and pass security audits.
+  As an Admin at a security-conscious company, I need to control who can export customer data out of Catalyst, so that I can comply with my company's data policies and pass security audits.
 
-  As an admin managing a large team, I need to grant senior members access to admin-grade workflows (like Playbooks) without giving them full admin privileges, so that I can delegate operational responsibility without risking the entire Catalyst configuration.
+  As an Admin managing a large team, I need to grant senior members access to admin-grade workflows (like Playbooks) without giving them full admin privileges, so that I can delegate operational responsibility without risking the entire Catalyst configuration.
 
-  As a user blocked from an action, I need to clearly understand the reason, so that I'm not stuck guessing whether it's a bug or a policy decision.
+  As a User blocked from an action, I need to clearly understand the reason, so that I'm not stuck guessing whether it's a bug or a policy decision.
 
-  As an engineering lead on another Catalyst team, I need a consistent, well-documented pattern for adding access control to new features, so that I can ship it with restricted functionality.
+  As an Engineering Lead on another Catalyst team, I need a consistent, well-documented pattern for adding access control to new features, so that I can ship it with restricted functionality.
 </UserStory>
 
 To address these problems, I designed Feature Permissions as a two-part system: a configurable permission level applied per-Role for each restricted feature (Everyone / Specific Roles / Admins Only), and a framework that other Catalyst engineering teams could plug their own features into.
@@ -117,13 +117,13 @@ By design, the framework was built so that any Catalyst engineering team could a
 ### Account Permissions
 
 <UserStory label="User Stories">
-  As an admin at a publicly traded company, I need to restrict which CSMs can see which Accounts, so that I can comply with my company's data handling policies and reduce exposure to insider trading concerns.
+  As an Admin at a publicly traded company, I need to restrict which CSMs can see which Accounts, so that I can comply with my company's data handling policies and reduce exposure to insider trading concerns.
 
   As a CS Leader, I need to give each CSM visibility only into their book of business, so that day-to-day work isn't cluttered with portfolios they have no responsibility for and shouldn't be acting on.
 
-  As an admin onboarding external contractors, I need to grant them access to a specific subset of Accounts without exposing the rest of the portfolio, so that I can extend Catalyst to partners without expanding my company's data exposure.
+  As an Admin onboarding external contractors, I need to grant them access to a specific subset of Accounts without exposing the rest of the portfolio, so that I can extend Catalyst to partners without expanding my company's data exposure.
 
-  As a user without access to a restricted Account, I shouldn't be able to discover that the Account exists at all (affects all features and areas), so that I only have access to the right data.
+  As a User without access to a restricted Account, I shouldn't be able to discover that the Account exists at all (affects all features and areas), so that I only have access to the right data.
 </UserStory>
 
 Account Permissions let admins define a set of Accounts (an Account Set) using filters on any Field, and grant access to that set to specific User Groups, or individual Users. Multiple sets might be assigned to a given user (say, "EMEA region" and "Strategic accounts"), in which case their access is the union of all assigned sets.
@@ -172,8 +172,7 @@ If a user has no Account Sets assigned to them (admin removed the only Account S
 
 <MetricGrid metrics={[
   { value: "10 of 10", label: "Top customers (by ARR)", detail: "activated Account Permissions within 2 weeks of GA" },
-  { value: "3", label: "Enterprise deals closed", detail: "previously unsupported by the old system" },
-  { value: "1st", label: "Downstream adoption", detail: "Note Templates, the quarter after launch" }
+  { value: "3", label: "Enterprise deals closed", detail: "previously unsupported by the old system" }
 ]} />
 
 The closed beta was praised by design partners and immediately unblocked one customer's expansion conversation, doubling a six-figure contract.
