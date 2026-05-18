@@ -22,7 +22,7 @@
   }
   /* Gray rail (the static vertical line) */
   .case-toc-nav {
-    border-left: 1px solid theme(--color-gray-200);
+    border-left: 1px solid #e5e7eb;
     padding-left: 1rem;
   }
   /* Colored indicator overlaying part of the rail */
@@ -30,7 +30,7 @@
     position: absolute;
     left: 0;
     width: 1px;
-    background: theme(--color-accent-700);
+    background: #4338ca;
     height: 0;
     top: 0;
     transition: top 0.2s ease, height 0.2s ease;
@@ -46,7 +46,6 @@
     const indicator = document.getElementById("case-toc-indicator");
     if (!article || !nav || !toc || !indicator) return;
 
-    // Only top-level headings — exclude anything inside <details>
     const headings = Array.from(
       article.querySelectorAll("h2, h3")
     ).filter((h) => !h.closest("details")) as HTMLElement[];
@@ -63,7 +62,6 @@
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-");
 
-    // Build TOC links
     const links: HTMLAnchorElement[] = [];
     headings.forEach((h) => {
       if (!h.id) h.id = slugify(h.textContent || "");
@@ -76,7 +74,7 @@
         isH3 ? "pl-4 text-[0.8rem]" : "font-medium",
       ].join(" ");
       link.dataset.target = h.id;
-      link.style.color = "#6b7280"; // gray-500 default
+      link.style.color = "#6b7280";
       nav.appendChild(link);
       links.push(link);
     });
@@ -85,13 +83,12 @@
       let activeLink: HTMLAnchorElement | null = null;
       links.forEach((l) => {
         if (l.dataset.target === activeId) {
-          l.style.color = "#4338ca"; // accent-700
+          l.style.color = "#4338ca";
           activeLink = l;
         } else {
           l.style.color = "#6b7280";
         }
       });
-      // Position the indicator overlay to match the active link's vertical span
       if (activeLink) {
         const navRect = nav.getBoundingClientRect();
         const linkRect = (activeLink as HTMLAnchorElement).getBoundingClientRect();
@@ -128,8 +125,7 @@
         ticking = true;
       }
     });
-    // Also recompute on resize (link rects change)
     window.addEventListener("resize", () => onScroll());
-    onScroll(); // initial state
+    onScroll();
   });
 </script>
