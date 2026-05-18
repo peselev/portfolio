@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const { title, description, ogImage = "/og-default.png" } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://example.com").toString();
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://peselev.com").toString();
 ---
 
 <!doctype html>
@@ -52,7 +52,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://example.com
       "name": "Konstantin Peselev",
       "jobTitle": "Senior Product Manager",
       "email": "peselevk@gmail.com",
-      "url": "https://example.com",
+      "url": "https://peselev.com",
       "alumniOf": {
         "@type": "CollegeOrUniversity",
         "name": "NYU Stern School of Business"
@@ -64,7 +64,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://example.com
       "knowsAbout": ["Product Management", "Growth", "Data Governance", "AI Strategy", "SaaS"]
     })} />
 
-    <!-- Google Analytics 4 - replace G-XXXXXXXXXX with your measurement ID -->
+    <!-- Google Analytics 4 - REPLACE G-XXXXXXXXXX with your real measurement ID -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KT5SKYYCP6"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];

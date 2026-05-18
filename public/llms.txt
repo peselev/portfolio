@@ -1,22 +1,22 @@
 # Konstantin Peselev — Senior Product Manager
 
-> Senior Product Manager with 10+ years of B2B SaaS experience. Currently at Totango (acquired Catalyst), leading Growth, Data Governance, and AI product roadmaps. Co-founder background. MBA from NYU Stern.
+> Senior Product Manager with 10+ years building B2B SaaS. Most recently leading Growth, Data Governance, and AI roadmaps at Totango (which acquired Catalyst). Based in Philadelphia, with regular time in NYC.
 
-This is the portfolio site of Konstantin Peselev. The site is a curated set of product management case studies, an about page, and a resume. Static content; updates infrequently.
+## About
+- Personal website: https://peselev.com
+- Resume page: https://peselev.com/resume
+- Resume PDF: https://peselev.com/konstantin-peselev-resume.pdf
+- LinkedIn: https://www.linkedin.com/in/peselev/
+- GitHub: https://github.com/peselev
+- Email: peselevk@gmail.com
 
-## Primary content
+## Case studies (selected work)
+- Campaigns Feature (Totango): https://peselev.com/work/totango-campaigns
+- AI Labs (Totango): https://peselev.com/work/totango-ai-labs
+- Data Access Control (Catalyst): https://peselev.com/work/catalyst-data-access-control
+- Product-Led Growth (Totango): https://peselev.com/work/totango-product-led-growth
+- Page Builder (Totango): https://peselev.com/work/totango-page-builder
 
-- [Home](/): Overview, elevator pitch, gallery of selected case studies.
-- [Work](/work): Complete archive of case studies.
-- [About](/about): Background and product philosophy.
-- [Resume](/resume): Career history and education. PDF available at /cv.pdf.
-
-## Case studies
-
-Each case study lives at /work/{slug}. The slug is derived from the project filename. Case studies follow a consistent structure: context, problem, what I did, outcomes, takeaway.
-
-## Contact
-
-- Email: konstantin@peselev.com
-- LinkedIn: (replace with handle)
-- GitHub: (replace with handle)
+## Education
+- Executive MBA, NYU Stern School of Business
+- MS & BS, Electrical Engineering, Moscow Power Engineering Institute
