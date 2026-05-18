@@ -10,21 +10,56 @@ const projects = (await getCollection("projects"))
 
 <Base
   title="Konstantin Peselev — Senior Product Manager"
-  description="Senior PM with 10+ years building B2B SaaS at Totango, Catalyst, and earlier as a co-founder. Specializing in Growth, Data Governance, and AI product strategy."
+  description="Senior PM with 10+ years building B2B SaaS. Most recently leading Growth, Data Governance, and AI roadmaps at Totango."
 >
-  <!-- Hero -->
-  <section class="max-w-5xl mx-auto px-6 pt-24 pb-20">
+  <!-- Hero / intro -->
+  <section class="max-w-3xl mx-auto px-6 pt-24 pb-16">
     <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-5">
       Senior Product Manager · 10+ years in SaaS
     </p>
-    <h1 class="font-display text-5xl md:text-6xl font-semibold text-gray-900 tracking-tight leading-[1.05] mb-7 max-w-4xl">
-      Quickly building products that turn complex problems into measurable outcomes to drive revenue.
-    </h1>
-    <p class="text-xl text-gray-600 leading-relaxed max-w-3xl mb-10">
-      Most recently leading Growth, Data Governance, and AI roadmaps at Totango (acquired Catalyst).
-      Previously co-founded a startup. MBA from NYU Stern. This is a selection of work I'm proud of.
+
+    <p class="text-2xl text-gray-900 leading-snug font-medium mb-8 max-w-2xl">
+      I'm a Product Manager, residing in Philadelphia, PA, and spending significant time in NYC.
     </p>
-    <div class="flex flex-wrap gap-3">
+
+    <div class="prose-intro space-y-5 text-lg text-gray-700 leading-relaxed max-w-2xl">
+      <p>
+        Code-literate enough to debate architecture with engineers.
+        Business-literate enough to defend the roadmap to a CEO.
+        The interesting work happens in the gap between — and that's where I've spent the last decade.
+      </p>
+      <p>
+        Most recently at Totango, leading Growth, Data Governance, and AI for a $40M ARR platform serving SAP, GitHub, and Dynatrace.
+        Earlier: an MBA from NYU Stern, two startups (one exit, another grew past $1M ARR and closed its next VC round), and an EE degree that still pays dividends in technical conversations.
+      </p>
+    </div>
+
+    <div class="mt-10 max-w-2xl">
+      <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-4">My style</p>
+      <ul class="space-y-3 text-lg text-gray-700 leading-relaxed">
+        <li class="flex gap-3">
+          <span class="text-accent-700 font-semibold shrink-0">·</span>
+          <span>Revenue is the scoreboard: if customers don't pay, the work wasn't worth it.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-accent-700 font-semibold shrink-0">·</span>
+          <span>Growth has to be sustainable: a quarter of steeper numbers isn't worth a year of tech debt.</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-accent-700 font-semibold shrink-0">·</span>
+          <span>People make decisions and own the consequences. AI implements.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mt-10 max-w-2xl border-l-2 border-accent-700 pl-5">
+      <p class="text-base text-gray-700 italic leading-relaxed">
+        Decide more than you investigate, investigate more than you delegate, and delegate as much as you can.
+      </p>
+      <p class="text-sm text-gray-500 mt-2">My mantra on AI agents and LLM work.</p>
+    </div>
+
+    <div class="mt-12 flex flex-wrap gap-3">
       <a
         href="#work"
         class="bg-accent-700 hover:bg-accent-900 text-white font-medium px-6 py-3 rounded-lg transition-colors"
@@ -32,40 +67,16 @@ const projects = (await getCollection("projects"))
         See selected work
       </a>
       <a
-        href="/resume"
+        href="mailto:peselevk@gmail.com"
         class="border border-gray-300 hover:border-gray-900 text-gray-900 font-medium px-6 py-3 rounded-lg transition-colors"
       >
-        Read résumé
+        Get in touch
       </a>
     </div>
   </section>
 
-  <!-- About strip -->
-  <section class="border-y border-gray-200 bg-gray-50">
-    <div class="max-w-5xl mx-auto px-6 py-12">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div>
-          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Currently</p>
-          <p class="font-medium text-gray-900">Senior PM, Totango</p>
-        </div>
-        <div>
-          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Focus areas</p>
-          <p class="font-medium text-gray-900">Growth · AI · Data Gov</p>
-        </div>
-        <div>
-          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Experience</p>
-          <p class="font-medium text-gray-900">10+ years SaaS</p>
-        </div>
-        <div>
-          <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">Education</p>
-          <p class="font-medium text-gray-900">MBA, NYU Stern</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Work gallery -->
-  <section id="work" class="max-w-5xl mx-auto px-6 py-24">
+  <section id="work" class="max-w-5xl mx-auto px-6 py-20">
     <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-3">Selected work</p>
     <h2 class="font-display text-3xl md:text-4xl font-semibold text-gray-900 mb-12 max-w-2xl">
       Case studies from the last few years.
