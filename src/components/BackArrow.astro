@@ -1,0 +1,47 @@
+---
+// Floating back arrow that sits in the top-left corner of the viewport.
+// Appears below the sticky nav (top: ~5rem) so it doesn't overlap.
+---
+
+<a
+  href="/work"
+  class="back-arrow"
+  aria-label="Back to all work"
+  title="Back to all work"
+>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+    <line x1="19" y1="12" x2="5" y2="12"></line>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </svg>
+</a>
+
+<style>
+  .back-arrow {
+    position: fixed;
+    top: 5rem;
+    left: 1.5rem;
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #ffffff;
+    border: 1px solid theme(--color-gray-200);
+    border-radius: 9999px;
+    color: theme(--color-gray-700);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: color 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .back-arrow:hover {
+    color: theme(--color-accent-700);
+    border-color: theme(--color-accent-700);
+    transform: translateX(-2px);
+  }
+  /* Hide on narrow screens where it would crowd the nav */
+  @media (max-width: 1023px) {
+    .back-arrow {
+      display: none;
+    }
+  }
+</style>

@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import Tag from "../../components/Tag.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
+import BackArrow from "../../components/BackArrow.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -17,13 +18,10 @@ const { Content } = await render(project);
 ---
 
 <Base title={`${project.data.title} — Konstantin Peselev`} description={project.data.summary}>
+  <BackArrow />
   <TableOfContents />
 
   <article class="max-w-3xl mx-auto px-6 pt-16 pb-16">
-    <a href="/" class="text-sm text-gray-600 hover:text-accent-700 transition-colors inline-flex items-center gap-2 mb-10">
-      <span>←</span> Back to all work
-    </a>
-
     <header class="mb-12 pb-10 border-b border-gray-200">
       <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-4">
         {project.data.company} · {project.data.role} · {project.data.period}

@@ -22,34 +22,54 @@ import Base from "../layouts/Base.astro";
       </a>
     </div>
 
-    <div class="prose-case">
+    <div class="resume-content">
       <h2>Experience</h2>
 
-      <h3>Senior Product Manager · Totango · 2022 – 2025</h3>
-      <ul>
-        <li>Owned product strategy for a $40M ARR Customer Success platform serving 350+ B2B customers including SAP, GitHub, and Dynatrace. Led three engineering squads across Growth, Data Governance, and AI roadmap.</li>
-        <li>Owned Growth strategy for SMB segment: shipped intent-driven onboarding, self-learning tools, new monetization model, and self-serve subscription management. Doubled segment revenue; lifted activation rate 2× within four weeks of release.</li>
-        <li>Built the AI Account Executive Summary to synthesize personalized insights from large unstructured datasets. Secured adoption by 9 of the top 10 largest enterprise customers.</li>
-      </ul>
+      <div class="resume-entry">
+        <p class="resume-company">Totango · 2022 – 2025</p>
+        <p class="resume-role">Senior Product Manager</p>
+        <ul>
+          <li>Owned product strategy for a $40M ARR Customer Success platform serving 350+ B2B customers including SAP, GitHub, and Dynatrace. Led three engineering squads across Growth, Data Governance, and AI roadmap.</li>
+          <li>Owned Growth strategy for SMB segment: shipped intent-driven onboarding, self-learning tools, new monetization model, and self-serve subscription management. Doubled segment revenue; lifted activation rate 2× within four weeks of release.</li>
+          <li>Built the AI Account Executive Summary to synthesize personalized insights from large unstructured datasets. Secured adoption by 9 of the top 10 largest enterprise customers.</li>
+        </ul>
+      </div>
 
-      <h3>Senior Product Manager · MyDealerOnline · 2018 – 2022</h3>
-      <ul>
-        <li>Joined 5-person pre-seed company; grew headcount past 30, ARR past $1M, closed institutional VC round.</li>
-        <li>Sourced and integrated five enterprise data partnerships (Black Book, Hyundai Capital, others); built MVP that anchored next funding round and nearly doubled revenue in 12 months.</li>
-        <li>Solved attribution by leveraging ML/AI to correlate online engagement with offline sales; productized as automated ROI report that became primary proof-of-value for enterprise deals and renewals.</li>
-      </ul>
+      <div class="resume-entry">
+        <p class="resume-company">MyDealerOnline · 2018 – 2022</p>
+        <p class="resume-role">Senior Product Manager</p>
+        <ul>
+          <li>Joined 5-person pre-seed company; grew headcount past 30, ARR past $1M, closed institutional VC round.</li>
+          <li>Sourced and integrated five enterprise data partnerships (Black Book, Hyundai Capital, others); built MVP that anchored next funding round and nearly doubled revenue in 12 months.</li>
+          <li>Solved attribution by leveraging ML/AI to correlate online engagement with offline sales; productized as automated ROI report that became primary proof-of-value for enterprise deals and renewals.</li>
+        </ul>
+      </div>
 
-      <h3>Co-Founder and Managing Director · LTV Europe · 2013 – 2018</h3>
-      <ul>
-        <li>Co-founded OEM CCTV distributor for EMEA; raised €1.5M, hired 14 across Germany/Hungary/Russia, reached €1M in sales six months ahead of plan. Sold to strategic competitor in 2018.</li>
-      </ul>
+      <div class="resume-entry">
+        <p class="resume-company">LTV Europe · 2013 – 2018</p>
+        <p class="resume-role">Co-Founder and Managing Director</p>
+        <ul>
+          <li>Co-founded OEM CCTV distributor for EMEA; raised €1.5M, hired 14 across Germany/Hungary/Russia, reached €1M in sales six months ahead of plan. Sold to strategic competitor in 2018.</li>
+        </ul>
+      </div>
 
-      <h3>Software Developer → Enterprise Account Executive · LUIS+ Group of Companies · 2004 – 2013</h3>
-      <p>Promoted from developer to enterprise sales; managed 100+ accounts with three direct reports. Led CRM/infrastructure migrations bridging business and engineering teams.</p>
+      <div class="resume-entry">
+        <p class="resume-company">LUIS+ Group of Companies · 2004 – 2013</p>
+        <p class="resume-role">Software Developer → Enterprise Account Executive</p>
+        <p>Promoted from developer to enterprise sales; managed 100+ accounts with three direct reports. Led CRM/infrastructure migrations bridging business and engineering teams.</p>
+      </div>
 
       <h2>Education</h2>
-      <h3>Executive MBA · NYU Stern School of Business</h3>
-      <h3>MS & BS, Electrical Engineering · Moscow Power Engineering Institute</h3>
+
+      <div class="resume-entry">
+        <p class="resume-company">NYU Stern School of Business</p>
+        <p class="resume-role">Executive MBA</p>
+      </div>
+
+      <div class="resume-entry">
+        <p class="resume-company">Moscow Power Engineering Institute</p>
+        <p class="resume-role">MS & BS, Electrical Engineering</p>
+      </div>
 
       <h2>Skills</h2>
       <p>
@@ -58,4 +78,53 @@ import Base from "../layouts/Base.astro";
       </p>
     </div>
   </section>
+
+  <style>
+    .resume-content h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: theme(--color-gray-900);
+      margin-top: 2.5rem;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .resume-entry {
+      margin-bottom: 2rem;
+    }
+    .resume-company {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: theme(--color-gray-900);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .resume-role {
+      font-size: 0.9375rem;
+      color: theme(--color-gray-600);
+      margin: 0.125rem 0 0.75rem 0;
+    }
+    .resume-entry ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: theme(--color-gray-700);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+    .resume-entry ul li {
+      margin-bottom: 0.5rem;
+    }
+    .resume-entry > p:not(.resume-company):not(.resume-role) {
+      color: theme(--color-gray-700);
+      font-size: 1rem;
+      line-height: 1.65;
+      margin: 0;
+    }
+    .resume-content > p {
+      color: theme(--color-gray-700);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+  </style>
 </Base>

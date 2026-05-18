@@ -5,12 +5,11 @@ export interface Props {
   href: string;
   title: string;
   summary: string;
-  role: string;
-  period: string;
+  company: string;
   tags: string[];
 }
 
-const { href, title, summary, role, period, tags } = Astro.props;
+const { href, title, summary, company, tags } = Astro.props;
 ---
 
 <a
@@ -18,7 +17,7 @@ const { href, title, summary, role, period, tags } = Astro.props;
   class="group block border border-gray-200 rounded-xl p-8 bg-white hover:border-accent-700 hover:shadow-lg transition-all"
 >
   <div class="flex items-center justify-between mb-3">
-    <p class="text-xs uppercase tracking-widest font-semibold text-gray-500">{role} · {period}</p>
+    <p class="text-xs uppercase tracking-widest font-semibold text-gray-500">{company}</p>
     <span class="text-accent-700 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
   </div>
   <h3 class="font-display text-2xl font-semibold text-gray-900 mb-3 group-hover:text-accent-700 transition-colors">

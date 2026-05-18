@@ -1,26 +1,52 @@
 ---
 // Sticky sidebar TOC: H2 (top level) and H3 (indented).
-// Active section highlights as user scrolls.
+// Active section is highlighted in indigo and tracked by a moving indicator
+// overlay on the left vertical line (Claude-docs style).
 ---
 
 <aside id="case-toc" class="hidden xl:block fixed right-8 top-32 w-56 z-30">
   <p class="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-3">
     On this page
   </p>
-  <nav id="case-toc-nav" class="text-sm border-l border-gray-200 pl-4">
-    <!-- Links injected by script -->
-  </nav>
+  <div class="case-toc-wrapper">
+    <span id="case-toc-indicator" class="case-toc-indicator" aria-hidden="true"></span>
+    <nav id="case-toc-nav" class="case-toc-nav text-sm">
+      <!-- Links injected by script -->
+    </nav>
+  </div>
 </aside>
+
+<style>
+  .case-toc-wrapper {
+    position: relative;
+  }
+  /* Gray rail (the static vertical line) */
+  .case-toc-nav {
+    border-left: 1px solid theme(--color-gray-200);
+    padding-left: 1rem;
+  }
+  /* Colored indicator overlaying part of the rail */
+  .case-toc-indicator {
+    position: absolute;
+    left: 0;
+    width: 1px;
+    background: theme(--color-accent-700);
+    height: 0;
+    top: 0;
+    transition: top 0.2s ease, height 0.2s ease;
+    pointer-events: none;
+  }
+</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const article = document.querySelector(".prose-case");
     const nav = document.getElementById("case-toc-nav");
     const toc = document.getElementById("case-toc");
-    if (!article || !nav || !toc) return;
+    const indicator = document.getElementById("case-toc-indicator");
+    if (!article || !nav || !toc || !indicator) return;
 
     // Only top-level headings — exclude anything inside <details>
-    // (collapsed content shouldn't trigger active state)
     const headings = Array.from(
       article.querySelectorAll("h2, h3")
     ).filter((h) => !h.closest("details")) as HTMLElement[];
@@ -50,22 +76,32 @@
         isH3 ? "pl-4 text-[0.8rem]" : "font-medium",
       ].join(" ");
       link.dataset.target = h.id;
-      // Default (inactive) color
-      link.style.color = "#6b7280"; // gray-500
+      link.style.color = "#6b7280"; // gray-500 default
       nav.appendChild(link);
       links.push(link);
     });
 
-    // Track currently active heading by index using scroll position.
-    // Approach: find the last heading whose top is above 1/3 of viewport.
     const setActive = (activeId: string | null) => {
+      let activeLink: HTMLAnchorElement | null = null;
       links.forEach((l) => {
         if (l.dataset.target === activeId) {
           l.style.color = "#4338ca"; // accent-700
+          activeLink = l;
         } else {
-          l.style.color = "#6b7280"; // gray-500
+          l.style.color = "#6b7280";
         }
       });
+      // Position the indicator overlay to match the active link's vertical span
+      if (activeLink) {
+        const navRect = nav.getBoundingClientRect();
+        const linkRect = (activeLink as HTMLAnchorElement).getBoundingClientRect();
+        const top = linkRect.top - navRect.top;
+        const height = linkRect.height;
+        indicator.style.top = `${top}px`;
+        indicator.style.height = `${height}px`;
+      } else {
+        indicator.style.height = "0";
+      }
     };
 
     const onScroll = () => {
@@ -82,7 +118,6 @@
       setActive(activeId);
     };
 
-    // Throttle scroll via rAF
     let ticking = false;
     window.addEventListener("scroll", () => {
       if (!ticking) {
@@ -93,6 +128,8 @@
         ticking = true;
       }
     });
+    // Also recompute on resize (link rects change)
+    window.addEventListener("resize", () => onScroll());
     onScroll(); // initial state
   });
 </script>

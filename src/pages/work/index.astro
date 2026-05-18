@@ -7,16 +7,15 @@ const projects = (await getCollection("projects")).sort((a, b) => a.data.order -
 ---
 
 <Base
-  title="Work — Konstantin Peselev"
-  description="Complete list of product management case studies and projects."
+  title="The work — Konstantin Peselev"
+  description="Case studies of product decisions, with the problem, the calls I made, what shipped, and what I'd do differently."
 >
   <section class="max-w-5xl mx-auto px-6 pt-20 pb-24">
-    <p class="text-xs uppercase tracking-widest font-semibold text-accent-700 mb-3">Work</p>
     <h1 class="font-display text-4xl md:text-5xl font-semibold text-gray-900 tracking-tight mb-6">
-      Every case study, in one place.
+      The work
     </h1>
     <p class="text-lg text-gray-600 mb-12 max-w-2xl">
-      A complete archive of projects across Growth, Data Governance, and AI roadmaps.
+      Each case below is a story — the problem, the call I made, what shipped, what I'd do differently.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,8 +24,7 @@ const projects = (await getCollection("projects")).sort((a, b) => a.data.order -
           href={`/work/${project.id}`}
           title={project.data.title}
           summary={project.data.summary}
-          role={project.data.role}
-          period={project.data.period}
+          company={project.data.company}
           tags={project.data.tags}
         />
       ))}
