@@ -1,0 +1,233 @@
+---
+title: "Product-Led Growth"
+summary: "Turning a net-loss segment into a profit generator"
+company: "Totango"
+role: "Senior Product Manager"
+period: "2024 – 2025"
+order: 3
+tags: ["PLG", "Self-Service", "Growth", "SMB"]
+featured: true
+---
+
+import UserStory from "../../components/UserStory.astro";
+import Caption from "../../components/Caption.astro";
+import MetricGrid from "../../components/MetricGrid.astro";
+
+**About Totango**
+
+Totango is a CSP (Customer Success Platform) with a primary focus on Enterprise use-cases (complex data hierarchy, vast amounts of data). The main purpose of the platform is to nurture the existing customer's relationships, ensure the expansion and renewals, and surface churn signals in advance.
+
+## Summary
+
+I drove a product-led growth strategy that transformed Totango's SMB segment from a manual, resource-heavy liability into an automated, highly profitable growth engine.
+
+Because the Totango platform was inherently built for white-glove Enterprise onboarding, applying it to the SMB market created severe friction and unsustainably high support costs, dragging the segment to a negative 15% profit margin.
+
+To solve this, I led a dedicated growth squad to architect a scalable self-service motion. I deployed an intent-capture setup flow to lift activation, built contextual self-learning tools to deflect the support burden, launched a self-service subscription management tool, and introduced a 14-day Trial tier so customers could experience the product's full power before committing.
+
+The structural impact was immediate: sustainable value realization doubled the segment's revenue, and by driving self-service support tickets below 0.05 per user weekly, we eliminated operational drag to elevate profit margins to over +50%.
+
+## The Context & Problem Space
+
+The Totango system was designed to support Enterprise use cases: complex data hierarchy, vast amounts of data, enormous processing power required, highly nuanced customization.
+
+This approach worked: Totango built a loyal customer base including SAP, Hewlett-Packard, and Dynatrace.
+
+The business goal was to increase the serviceable market (SAM) by penetrating the Small and Medium Business Segment (SMB).
+
+I joined Totango to lead a dedicated growth squad to tackle this expansion. By the time I took ownership, the company had established a baseline:
+
+- Steady flow of new daily signups to Community Edition (Totango's free plan)
+- Working funnel: self-signup → free plan → sign-up for a paid plan
+- Paying SMB customers that successfully reached the end of the funnel
+
+I identified the following problems:
+
+- Very low Activation rate (<1%)
+- Very low Conversion rate (<1%)
+- Negative profit margin (-15%) - primarily driven by tickets to support, implementation, and sales teams
+
+## Approach
+
+After extensive research I formulated the following hypotheses:
+
+**The Totango setup process needs to be optimized for self-service.**
+New customers routinely stalled during the setup process: connect data source, setup integration job, build automations, setup CS program, enable teammates - every step's UI/UX assumed white-glove treatment.
+Incomplete or wrong setup hinders the value realization, which leads to churn.
+Once successfully addressed, we should see the improvement in Activation rate and Conversion rate metrics.
+
+**Self-service segment can become profitable once ticket volume is minimized.**
+Totango operations are optimized with Enterprise use cases in mind, as such the company upfronts a lot of costs in the first months during the Onboarding stage. This business model works for 3-year long contracts of $200,000+ size. However, this approach is not suitable for a monthly subscription with annual revenue around $20,000.
+A chilling illustration of this topic: a single request from an SMB customer to add an extra user seat required coordination of at least three people to execute, and produced so much hidden expenses that it took 3 months to offset it.
+
+To address it I developed the following plan:
+
+- Introduce the guided user experience during the setup
+- Provide self-learning resource for admins and regular users
+- Provide the tools for admins to fully self-manage their subscription
+- Optimize the Free and Trial plans in such a way that customers are naturally pushed down the funnel as the value realized is increasing
+
+These initiatives were developed in parallel. I managed scope tightly with engineering and sequenced tickets so most sprints made progress on all four tracks at once.
+
+## Execution
+
+To structure our initiatives, I first mapped the user journey to identify where Product needed to take the lead:
+
+| Stage | User Action | Driver |
+| --- | --- | --- |
+| Discovery | Customer learns about Totango and lands on the website | Marketing led |
+| Registration | Customer completes registration | Marketing led |
+| Activation | Admin connects data, and activates CS programs | Product led |
+| Adoption | Customer uses the system within free tier limits | Product led |
+| Product Qualification | Customer outgrows the free tier, and realizes the value created by Totango is worth signing up for a paid plan | Product led |
+| Conversion | Admin selects the plan best suited for their needs, and converts to a paying customer | Product led |
+
+### Addressing the Blank Canvas issue
+
+The cohort analysis showed that "blank canvas" issue (admin not knowing what the right Totango setup looks like, and how to get there) was a root cause for low conversion rate:
+
+- A significant portion of new users abandoned the system without completing the setup.
+- Many accounts showed extensive activity (experimentation, trial-and-error) in the first 10 days, after which the usage abruptly went to zero.
+- Data mining along with CSAT campaigns and targeted users interviews validated the initial theory: correct setup is crucial and necessary for successful adoption of Totango, yet the existing flow was not optimized for self-service motion.
+
+<UserStory>
+  As a new Admin, I want the system to recommend the correct setup templates based on my goals, so that I can realize value without needing to be a Totango expert.
+</UserStory>
+
+To address the blank canvas issue, and guide a newly registered admin through the process, I worked with design, engineering, and product marketing to build an intent-capture dialog into the setup flow:
+
+![Intent-capture dialog during Totango setup](/images/work/plg/plg-01.png)
+
+Next, to utilize the intent information to improve the user experience I partnered with Totango CS team as domain experts, and mapped the stated intent to the implied goals, and finally to the most relevant CS programs. As a result, depending on the given answers the system was able to adjust the first-time user experience by pre-installing the relevant CS program templates (called SuccessBLOCs).
+
+And as the customer opened SuccessBLOC Marketplace (a curated collection of the templates), they now got the most relevant programs prioritized in a new section:
+
+![SuccessBLOC Marketplace with personalized recommendations](/images/work/plg/plg-02.png)
+
+✅  The cohort analysis showed drastic improvement as the default templates were released: churn within the first 7 days went from 68% to under 5%.
+
+✅ Thanks to the suggested section, more than half of customers on free tier added new SuccessBLOCs, driving the value, and improving the chances of their conversion to the paid tier.
+
+### Providing self-learning materials
+
+One of the pressing issues was unblocking a user (Admin during setup, or regular User doing a new task, or learning a new feature). When a user is stuck they do not always realize what exactly the issue is. And so, even though Totango had extensive and very detailed Help Center, the Support and Implementation team still received a significant inflow of similar questions from new users. The dilemma was that answering most of them was cost-prohibitive, but if left unanswered, it would in many cases directly lead to customer churning.
+
+To address it I partnered with the Customer Education team to create a comprehensive library of Video Tutorials based on the existing and newly created content.
+
+<UserStory label="User Stories">
+  As a User facing a blocker, I want immediate guidance relevant to my current task, so that I can proceed with minimal disruption to my workflow.
+
+  As a Totango Support Agent, I want basic inquiries from self-serve customers to be deflected, so that our team can preserve resources for complex, high-value enterprise needs.
+</UserStory>
+
+I partnered with the Design team to build a specialized tool ("Learning Panel") that analyzed the user actions, intent, and would recommend the most relevant learning materials:
+
+<details>
+  <summary>Video Tutorials based on user's intent</summary>
+
+  Tutorials feed when admin works on integrations:
+
+  ![Video tutorials surfaced during integrations work](/images/work/plg/plg-03.png)
+
+  Tutorials feed for admin working on Health profiles:
+
+  ![Video tutorials surfaced during Health profile setup](/images/work/plg/plg-04.png)
+</details>
+
+This tool put the 'meet customers where they are' principle into practice: the system was able to identify user's struggle and offer path to value without relying on the user to know what is the right question to ask.
+
+The original design proposed a complex ML algorithm with a relevancy score calculated on the fly, utilizing a feedback loop (thumbs up/down) to correct the weights. However, to accelerate time-to-market, I made the decision to trade off complexity for speed. For V1, we scoped the feature down to a simpler heuristic model of sorting the content: the system used the page (part of the URL), keywords on the screen, user role and permissions to find the relevant content. To our surprise, this model worked really well, the content was routinely praised by users, which made a more complex version unnecessary, allowing the team to divert engineering resources to address other sources of friction.
+
+This is also a value created through cross-function collaboration, since both ingredients were critical for success: the **relevancy**, and the **quality** of the content.
+
+✅ Upon release we saw a skyrocketing adoption: 7% of all MAU watched at least one video in the first 2 weeks after the release. To my surprise, a lot of content was consumed by newly invited users from Enterprise customers - a use case I kept in mind, but was not focused on.
+
+✅ This feature successfully addressed the friction on the Activation stage of the journey - within the next 4 weeks the Activation rate doubled.
+
+### Subscription Management
+
+To complete the self-service motion I needed to provide the customers with Subscription Management tool.
+
+<UserStory label="User Stories">
+  As an Admin, I need real-time visibility into my team's consumption versus our limits, so that I am never caught off guard by unexpected feature blocks.
+
+  As an Admin who has outgrown our current tier, I need a frictionless way to authorize an account expansion myself, so that my team's workflow isn't stalled while waiting for a vendor's sales team to intervene.
+
+  As Totango Support, Sales, or CS Agent, I need the customer's contract data to be an automatic, single source of truth, so that I don't waste time reconciling discrepancies between Salesforce and the product backend.
+</UserStory>
+
+This is not critical for Enterprise customers due to the nature of enterprise sales motion. But SMB customers needed that tool to be able to monitor their usage, limit it, or expand the subscription - all without intervention of the Totango team.
+
+To achieve it I partnered with the Architecture team to build a new 'subscription object' that was acting like a source of truth for limits within Totango, and then worked with the Implementation team to create a custom integration between Salesforce and Totango's own Totango account. This ensured that the contract data was always up-to-date without any human oversight.
+
+<details>
+  <summary>Interface and User Flow</summary>
+
+  Subscription page that reflects limits and utilization levels:
+
+  ![Subscription page with plan usage and limits](/images/work/plg/plg-05.png)
+
+  The limits are repeated for better visibilities in the relevant screens:
+
+  ![Connectors view repeating consumption indicators](/images/work/plg/plg-06.png)
+
+  One-click expansion dialog (fully automatic, requires zero touch from Totango team):
+
+  ![One-click expansion dialog with per-seat pricing](/images/work/plg/plg-07.png)
+
+  When Admin (or User with respective permissions) hits the limit, the system not just enforces the limit by blocking the action, but offers a resolution:
+
+  ![Out-of-seats prompt with prorated invoice and one-click upgrade](/images/work/plg/plg-08.png)
+</details>
+
+✅ Following the release, SMB customers averaged 3 expansion deals daily. The headline number was **15x growth** over the manual process, but investigation revealed a backlog effect: customers had been hoarding expansion requests to process in bulk. The normalized baseline showed **45%** growth in expansion-driven revenue.
+
+### Improve Conversion rate
+
+Even the best tools and a frictionless self-service motion wouldn't generate business value on their own. These are all means to an end - to drive the amount of paying customers with healthy margin and LTV metrics.
+
+There was a hypothesis about Free tier customers: there is a significant portion of customers who completed the activation, but are not convinced that the value Totango provides justifies conversion to the paid tier.
+
+To test this, I partnered with the Product Marketing team to run a series of initiatives, starting with A/B testing the Free tier limits.
+
+#### AB test of the Free tier content
+
+Randomly selected customers got 2 user seats instead of 1. This helped us to test the idea that 2 users would start collaborating within the system, and it will create enough pulling motion to purchase extra seat.
+
+After 2 months, the data invalidated our hypothesis: there was no statistically significant change in conversion rates.
+
+We repeated tests with other limits (monthly emails, account records) and uncovered a crucial behavioral insight: users who didn't perceive the core value simply throttled their usage to stay under the free limits. At the same time, users who experienced the aha! moment converted well in advance - often while consuming only 20-30% of the free plan limits.
+
+#### Trial tier
+
+To provide the new customers a "safe space" to test the system above the Free tier limits without committing in advance, I designed the Trial tier: it provided 5 user seats, dramatically increased the limits for monthly emails and number of accounts.
+
+The trial would last for 14 days, after which customer can either convert to a paying plan, or reduce the consumption to the Free plan limits and keep using the system for free.
+
+The Trial tier became our strongest conversion driver. It proved that a time-bound, risk-free experience of the product's full power creates far more urgency than simply tweaking arbitrary free-tier limits.
+
+#### Email Drip Campaigns
+
+To maximize the chances of creating value for the customers, I was looking for a way to promote the correct setup and active usage. Partnering again with the Product Marketing team, I designed a series of behavior-triggered drip campaigns, that were triggered in specific circumstances (for example: "activated NPS program", "2 active users", etc.) and were highlighting the best practices, promoting the company webinars, and self-educating courses.
+
+## Impact & Outcomes
+
+<MetricGrid metrics={[
+  { value: "−15% → +50%", label: "SMB segment margin", detail: "From net loss to net profit" },
+  { value: "2×", label: "SMB revenue", detail: "Driven by frictionless funnel and automated expansion" },
+  { value: "<0.05", label: "Tickets per user weekly", detail: "Self-service eliminated operational drag" }
+]} />
+
+This initiative completely transformed the SMB market for Totango:
+
+- By driving self-service support tickets below our target threshold (0.05 tickets/customer/week), we transformed the SMB segment margin from -15% to over +50%.
+- The frictionless funnel and automated expansion loops resulted in a x2 increase in SMB revenue.
+- Sales, Implementation, and Support teams were able to dedicate their resources entirely to high-value Enterprise accounts without being overrun by standard SMB requests.
+
+## Key Takeaways
+
+At its core, the success of this project relied on mapping the user journey, methodically addressing bottlenecks, and leaning heavily on cross-functional collaboration. Beyond the immediate SMB metrics, this initiative generated significant secondary effects for Totango and its customers:
+
+- Even though the Enterprise use case wasn't the primary focus, those users heavily adopted the self-learning materials and subscription management tools, leading to direct positive feedback from Enterprise clients and the CS team.
+- Because we built a fully automated subscription management architecture, Totango was fully equipped to roll out a new pricing model (driven by the Revenue team). My squad could seamlessly integrate new premium features (Viewer User licenses, Multi-product suites) drastically accelerating GTM efforts and driving adoption.
+- Growing the SMB segment to a substantial size gave the business a highly predictable revenue stream. While the loss of a single Enterprise account can derail quarterly KPIs, the automated SMB funnel created a sustainable, self-replenishing source of revenue.
