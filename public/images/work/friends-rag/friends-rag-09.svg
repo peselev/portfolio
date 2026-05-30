@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="360" viewBox="0 0 680 360" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" role="img">
+<title>The fix: a hybrid that beats the baseline</title>
+<text x="52" y="28" font-size="16" font-weight="700" fill="#101828">The fix: a hybrid that beats the baseline</text>
+<text x="52" y="48" font-size="12.5" fill="#475467">recall@5 across three question sets. Matching chunk size to question granularity flips the result.</text>
+<line x1="52" y1="296.0" x2="660" y2="296.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="300.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.0</text>
+<line x1="52" y1="258.3" x2="660" y2="258.3" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="262.3" font-size="10.5" fill="#98A2B3" text-anchor="end">0.1</text>
+<line x1="52" y1="220.7" x2="660" y2="220.7" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="224.7" font-size="10.5" fill="#98A2B3" text-anchor="end">0.2</text>
+<line x1="52" y1="183.0" x2="660" y2="183.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="187.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.3</text>
+<line x1="52" y1="145.3" x2="660" y2="145.3" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="149.3" font-size="10.5" fill="#98A2B3" text-anchor="end">0.4</text>
+<line x1="52" y1="107.7" x2="660" y2="107.7" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="111.7" font-size="10.5" fill="#98A2B3" text-anchor="end">0.5</text>
+<line x1="52" y1="70.0" x2="660" y2="70.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="74.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.6</text>
+<rect x="82.4" y="125.4" width="67.9" height="170.6" rx="2" fill="#B45309"/>
+<text x="116.4" y="121.4" font-size="9.5" fill="#101828" text-anchor="middle">0.453</text>
+<rect x="153.3" y="110.7" width="67.9" height="185.3" rx="2" fill="#4338CA"/>
+<text x="187.3" y="106.7" font-size="9.5" fill="#101828" text-anchor="middle">0.492</text>
+<text x="153.3" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Direct</text>
+<rect x="285.1" y="119.0" width="67.9" height="177.0" rx="2" fill="#B45309"/>
+<text x="319.0" y="115.0" font-size="9.5" fill="#101828" text-anchor="middle">0.470</text>
+<rect x="356.0" y="113.3" width="67.9" height="182.7" rx="2" fill="#4338CA"/>
+<text x="390.0" y="109.3" font-size="9.5" fill="#101828" text-anchor="middle">0.485</text>
+<text x="356.0" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Reworded</text>
+<rect x="487.7" y="288.5" width="67.9" height="7.5" rx="2" fill="#B45309"/>
+<text x="521.7" y="284.5" font-size="9.5" fill="#101828" text-anchor="middle">0.020</text>
+<rect x="558.7" y="258.3" width="67.9" height="37.7" rx="2" fill="#4338CA"/>
+<text x="592.6" y="254.3" font-size="9.5" fill="#101828" text-anchor="middle">0.100</text>
+<text x="558.7" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Heavily</text>
+<text x="558.7" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">Reworded</text>
+<rect x="52" y="337" width="11" height="11" rx="2" fill="#B45309"/>
+<text x="68" y="346" font-size="11" fill="#101828">BM25 (baseline)</text>
+<rect x="179.0" y="337" width="11" height="11" rx="2" fill="#4338CA"/>
+<text x="195.0" y="346" font-size="11" fill="#101828">Window+BM25 hybrid</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="360" viewBox="0 0 680 360" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" role="img">
+<title>The surprise: keyword search wins</title>
+<text x="52" y="28" font-size="16" font-weight="700" fill="#101828">The surprise: keyword search wins</text>
+<text x="52" y="48" font-size="12.5" fill="#475467">First evaluation, recall@5. The hybrid I expected to win scored below BM25 alone.</text>
+<line x1="52" y1="296.0" x2="660" y2="296.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="300.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.0</text>
+<line x1="52" y1="258.3" x2="660" y2="258.3" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="262.3" font-size="10.5" fill="#98A2B3" text-anchor="end">0.1</text>
+<line x1="52" y1="220.7" x2="660" y2="220.7" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="224.7" font-size="10.5" fill="#98A2B3" text-anchor="end">0.2</text>
+<line x1="52" y1="183.0" x2="660" y2="183.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="187.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.3</text>
+<line x1="52" y1="145.3" x2="660" y2="145.3" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="149.3" font-size="10.5" fill="#98A2B3" text-anchor="end">0.4</text>
+<line x1="52" y1="107.7" x2="660" y2="107.7" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="111.7" font-size="10.5" fill="#98A2B3" text-anchor="end">0.5</text>
+<line x1="52" y1="70.0" x2="660" y2="70.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="74.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.6</text>
+<rect x="74.8" y="125.4" width="50.2" height="170.6" rx="2" fill="#B45309"/>
+<text x="99.9" y="121.4" font-size="9.5" fill="#101828" text-anchor="middle">0.453</text>
+<rect x="128.0" y="119.0" width="50.2" height="177.0" rx="2" fill="#4338CA"/>
+<text x="153.1" y="115.0" font-size="9.5" fill="#101828" text-anchor="middle">0.470</text>
+<text x="128.0" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">BM25</text>
+<text x="128.0" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">(keyword)</text>
+<rect x="226.8" y="126.5" width="50.2" height="169.5" rx="2" fill="#B45309"/>
+<text x="251.9" y="122.5" font-size="9.5" fill="#101828" text-anchor="middle">0.450</text>
+<rect x="280.0" y="127.3" width="50.2" height="168.7" rx="2" fill="#4338CA"/>
+<text x="305.1" y="123.3" font-size="9.5" fill="#101828" text-anchor="middle">0.448</text>
+<text x="280.0" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Hybrid</text>
+<text x="280.0" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">(naive)</text>
+<rect x="378.8" y="198.8" width="50.2" height="97.2" rx="2" fill="#B45309"/>
+<text x="403.9" y="194.8" font-size="9.5" fill="#101828" text-anchor="middle">0.258</text>
+<rect x="432.0" y="186.8" width="50.2" height="109.2" rx="2" fill="#4338CA"/>
+<text x="457.1" y="182.8" font-size="9.5" fill="#101828" text-anchor="middle">0.290</text>
+<text x="432.0" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Vector</text>
+<text x="432.0" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">(5-utt window)</text>
+<rect x="530.8" y="214.3" width="50.2" height="81.7" rx="2" fill="#B45309"/>
+<text x="555.9" y="210.3" font-size="9.5" fill="#101828" text-anchor="middle">0.217</text>
+<rect x="584.0" y="207.5" width="50.2" height="88.5" rx="2" fill="#4338CA"/>
+<text x="609.1" y="203.5" font-size="9.5" fill="#101828" text-anchor="middle">0.235</text>
+<text x="584.0" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Vector</text>
+<text x="584.0" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">(scene)</text>
+<rect x="52" y="337" width="11" height="11" rx="2" fill="#B45309"/>
+<text x="68" y="346" font-size="11" fill="#101828">Direct</text>
+<rect x="119.6" y="337" width="11" height="11" rx="2" fill="#4338CA"/>
+<text x="135.6" y="346" font-size="11" fill="#101828">Reworded</text>
+</svg>

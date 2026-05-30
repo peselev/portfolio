@@ -16,6 +16,7 @@
 - Data Access Control (Catalyst): https://peselev.com/work/catalyst-data-access-control
 - Product-Led Growth (Totango): https://peselev.com/work/totango-product-led-growth
 - Page Builder (Totango): https://peselev.com/work/totango-page-builder
+- AI search: RAG system (Side-project): https://peselev.com/work/friends-rag 
 
 ## Education
 - Executive MBA, NYU Stern School of Business

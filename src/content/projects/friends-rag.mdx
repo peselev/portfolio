@@ -1,0 +1,365 @@
+---
+title: "Friends RAG"
+summary: "Testing how far AI-assisted engineering goes, and where the tutorials are wrong"
+company: "Side project"
+role: "Solo build"
+period: "May 2026"
+order: 5
+tags: ["RAG", "LLM", "Evaluation"]
+featured: true
+---
+
+import Caption from "../../components/Caption.astro";
+
+I built a RAG system that answers questions about the TV show *Friends*. The creation of such a system itself is a clean process with good step-by-step guides. What was different, and where an interactive AI-assisted process pulls ahead of following a tutorial, is that my own results contradicted the standard playbook. Chasing down the **why** is what made this worth writing. The textbook answer for how to combine retrieval methods was not working well for this corpus. Catching that, locating the root cause, and addressing the issue is what this piece is about.
+
+## Summary
+
+The short version of what I found:
+
+- The textbook recipe (vector search, plus a hybrid for good measure) **lost** to plain keyword search on this corpus, and the naive hybrid scored **below** keyword search alone.
+- The cause wasn't the method, it was **granularity**: I was searching whole scenes to answer questions about single lines. Matching chunk size to question size fixed it, and a properly built hybrid then beat the keyword baseline.
+- Two of my "smart" instincts were wrong when measured: a query-aware hybrid lost to naive equal weighting, and a reranker I'd written off from a few bad examples turned out to be the single best component.
+- The best-scoring configuration was **not** the one I shipped: the reranker adds ~3s of latency, so the public demo defaults to the fast hybrid with the reranker as an optional toggle.
+
+The throughline is measure, don't assume, plus a candid section at the end on what it's actually like to build something non-trivial with an AI partner. The demo is below (or <a href="https://peselevk-friends-rag.hf.space" target="_blank" rel="noopener noreferrer">open it in a new tab</a>); everything after it is the how and the why.
+
+<iframe
+  src="https://peselevk-friends-rag.hf.space?embed=true"
+  title="Friends RAG demo"
+  width="100%"
+  height="880"
+  loading="lazy"
+  frameborder="0"
+  style="border: 1px solid #e5e7eb; border-radius: 8px;"
+  allow="clipboard-write"
+></iframe>
+
+It runs on the Claude API and answers using **only the scenes it retrieves**, so the model's own knowledge of the show doesn't bleed into the answer. It cites the scenes it used, and it refuses when the retrieved context doesn't contain an answer.
+
+The demo is hosted on a free Hugging Face Space, which sleeps when idle. The first request after a nap takes about 30 seconds to wake, and occasionally a few minutes for a full cold rebuild. A keep-alive action mostly hides this, but if it's slow, that's why.
+
+## Why build this, and why *Friends*
+
+I strongly believe non-engineers should occasionally build things. With today's tools the barrier is low enough that it is becoming a basic part of the job, and it builds real empathy for developers. And in my personal case, as a Product Manager it makes my technical conversations with the engineers easier and more impactful.
+
+As a side quest, I wanted to test how far "assisted engineering" (Andrej Karpathy's term for coding with an AI partner doing the heavy lifting) goes with today's capabilities. Whatever the ceiling is nowadays, I didn't hit it this project. More on that in [What I learned](#what-i-learned-while-working-on-this).
+
+*Friends* turned out to be a good corpus for three reasons:
+
+- It's large and varied. Some questions are isolated to one moment ("Why did Ross shout PIVOT?"), others are distributed across the whole series ("Name all of Chandler's girlfriends"). That range stresses a retrieval system in different ways.
+- It's demoable. People know the show, so the demo sparks engagement instead of polite nods.
+- I've watched the show **so many times** that I can judge almost any answer instantly without looking anything up, which turned out to be very convenient.
+
+The corpus comes from the **Character Mining** project by Emory NLP, and it's excellent: clean, verified text with per-utterance speaker labels and even stage directions. The part that mattered most for my project is that it ships with a built-in `span_qa` question-and-answer set, known questions paired with the exact utterances that answer them. That's what made evaluation possible without me hand-labeling hundreds of examples. The full corpus is 236 episodes, 3,107 scenes, 67,373 utterances, roughly 1.1M tokens.
+
+Character Mining: [github.com/emorynlp/character-mining](https://github.com/emorynlp/character-mining) · Emory NLP: [nlp.mathcs.emory.edu](http://nlp.mathcs.emory.edu/)
+
+## Tools
+
+**Claude Code** did the heavy lifting: co-author, engineering partner, and a surprisingly good research consultant. \
+**Cursor** handled refactors, code explanations, and file manipulation. \
+**Terminal** was for environment management, small script edits, running things, and git.
+
+Code: [github.com/peselev/friends-rag](https://github.com/peselev/friends-rag)
+
+<details>
+  <summary>Basics: RAG, chunking, vector vs. keyword retrieval, and the metrics</summary>
+
+  **RAG (Retrieval-Augmented Generation).** Instead of asking an LLM to answer from its training, you first **retrieve** the most relevant chunks of your own text and put them in the prompt: "Here are five relevant passages. Answer using only these." The model contributes language and reasoning; the retrieved documents contribute facts.
+
+  **Chunking.** Before any retrieval, the source text is split into smaller pieces - chunks. A chunk is the unit that gets embedded, indexed, and ultimately retrieved. Chunk size is a design choice. Too large, and one chunk covers many topics, diluting the signal for any single one. Too small, and it loses the surrounding context that gives a line its meaning. This choice becomes central later.
+
+  **Vector retrieval.** Each chunk is passed through an embedding model that turns it into a vector (a long list of numbers) capturing its meaning. Semantically similar text lands close together in that multidimensional space. To retrieve, you embed the question the same way and find the nearest chunks by distance (L2 or cosine). Strength: it matches meaning, so "how do I cancel my plan" finds "steps to terminate a subscription." Weakness: it can blur specific rare terms.
+
+  **BM25 (keyword retrieval).** The classic keyword-ranking algorithm behind decades of search boxes. It rewards passages that contain the question's words, weights rare words far more heavily than common ones, and corrects for length so a long passage doesn't win just by having more words in it. It excels at exact rare terms and fails on pure paraphrase: if the question and the text share no words, BM25 can't connect them.
+
+  | | Vector | BM25 |
+  |---|---|---|
+  | Matches | meaning / paraphrase | exact terms |
+  | Great at | "where do they hang out" | "Nina Bookbinder" |
+  | Blind to | precise rare tokens | synonyms / rewording |
+
+  **recall@k** is the headline metric here. Of the questions where a correct source scene exists, it's the fraction where at least one correct scene shows up in the top k retrieved results. I report **recall@5**. Why this metric: it maps directly to "did the system hand the LLM a scene from the right episode?" If the right scene never makes it into the context, the generated answer can't be correct, so recall@5 gates everything downstream.
+
+  **MRR (Mean Reciprocal Rank)** is a supporting signal. It rewards ranking the correct scene higher (rank 1 is worth more than rank 5), not just including it somewhere. I used it in evaluation as a supplementary metric.
+
+  <Caption>References: [RAG (Lewis et al., 2020)](https://arxiv.org/abs/2005.11401) · [embeddings / vector search](https://en.wikipedia.org/wiki/Sentence_embedding) · [BM25 (Wikipedia)](https://en.wikipedia.org/wiki/Okapi_BM25) and the canonical write-up, [Robertson & Zaragoza, "The Probabilistic Relevance Framework: BM25 and Beyond"](https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf) · [recall and MRR (evaluation measures)](https://en.wikipedia.org/wiki/Evaluation_measures_%28information_retrieval%29)</Caption>
+</details>
+
+## Tech stack
+
+The stack is quite standard:
+
+- **Embeddings:** OpenAI model: `text-embedding-3-small`, produces 1536 dimensions vectors.
+- **Vector store:** Chroma, queried by L2 distance.
+- **Keyword search:** `rank_bm25`, a small Python library implementing the BM25 family (`b=0.75` is the standard setting for how much it discounts longer passages).
+- **Fusion:** Reciprocal Rank Fusion (RRF), a standard way to merge two ranked lists using only each item's rank position, not its raw score; `k=60` is the conventional smoothing constant that keeps any single top result from dominating.
+- **Generation:** Claude (model: `claude-haiku-4-5`), instructed to answer only from retrieved scenes, cite them, and refuse when they're insufficient.
+- **Retrieval depth:** top-5.
+
+The rest is plumbing: JSONL files and common Python libraries like `chromadb` for the vector store and `sentence-transformers` for the reranking models.
+
+## The pipeline
+
+![The Friends RAG pipeline: a one-time index build, a per-query answer path, and the evaluation loop used to tune them.](/images/work/friends-rag/friends-rag-01.svg)
+
+Specifically here the pipeline loads the raw Emory JSON (130MB), strips each utterance down to the essentials (ID, speaker, transcript), and emits a roughly 5MB processed file. From there it chunks and embeds the text into Chroma, builds the BM25 index. At query it retrieves from both, fuses, and generates the answer. Evaluation isn't part of this runtime path; it was a separate activity I ran while tuning the pipeline, and it's the subject of the next section.
+
+<details>
+  <summary>See it in action</summary>
+
+  A few moments that show the behavior I cared about most: answering from the scenes it found, and knowing when to stop.
+
+  ![Friends RAG answering a question with cited sources expanded](/images/work/friends-rag/friends-rag-02.png)
+  <Caption>Answering a question, with the scenes it used expanded underneath.</Caption>
+
+  ![Friends RAG refusing to answer a question the show can't answer](/images/work/friends-rag/friends-rag-03.png)
+  <Caption>Refusing a question the show can't answer, instead of inventing one.</Caption>
+
+  ![Friends RAG explaining it lacks enough information to answer](/images/work/friends-rag/friends-rag-04.png)
+  <Caption>Admitting when the retrieved scenes don't contain enough to answer.</Caption>
+</details>
+
+## Evaluation
+
+Seeing the feature working is an emotional milestone, but of course, it's not the completion of the project: in traditional programming it can be misleading due to bugs, unaddressed edge cases, wrong configuration etc. But in probabilistic software the question is not only "does it work" (did it generate the answer), but "is it helpful" (is the answer correct, is it correct for the right reasons?)
+
+### First results
+
+To evaluate the performance of my RAG I was using the Q&A dataset included in the Character Mining dataset. First, I built several modes for retrieval:
+
+1. Scene-long vector (1 chunk is a scene in the episode)
+2. Fixed-length vector (500-character window)
+3. 1 utterance vector (one chunk is a single line of dialogue)
+4. 5 utterance sliding vector (a sliding window of five consecutive lines, stepped through the scene one line at a time)
+5. BM25 (search by keywords)
+6. Hybrid (each retriever ranks the chunks on its own, then Reciprocal Rank Fusion blends the two ranked lists into a single ordering)
+
+![The mode-comparison tool: the same question answered side by side by four retrieval strategies.](/images/work/friends-rag/friends-rag-05.png)
+<Caption>A local tool I built to see how each retrieval strategy answers the same question, side by side.</Caption>
+
+The method is straightforward, because the dataset does the hard part. Every `span_qa` question comes paired with the exact utterances that answer it, so for each question I already know the correct scene. I ran each question through every mode, took the top five results, and recorded whether a correct scene appeared (recall@5) and how high it landed (MRR). I ran this on the original questions and on Emory's paraphrased versions of them.
+
+I evaluated at this point, before polishing generation or the interface, on purpose. Retrieval is the gate. If the right scene never enters the context, no amount of prompt tuning or interface work can make the answer correct. Measuring retrieval first tells me whether anything built on top of it can succeed at all.
+
+The common tutorial framing goes roughly like this: dense vector retrieval, enabled by transformer models, is the modern default and generally beats classical keyword search when compute isn't the constraint; and adding keyword search on top, as a hybrid, usually improves precision beyond either method alone.
+
+This framing is common in practitioner guides, but it's contested in the literature: dense retrieval's edge is workload-dependent, and BM25 remains a strong baseline on many benchmarks (e.g. [BEIR](https://arxiv.org/abs/2104.08663)), sometimes beating dense retrieval outright on domain corpora with precise terminology ([T2-RAGBench, 2026](https://arxiv.org/abs/2604.01733)). The "hybrid beats either alone" half is well supported but, as this project shows, not automatic.
+
+| Retrieval mode | Direct (recall@5) | Reworded (recall@5) |
+|---|---|---|
+| **BM25 (keyword)** | **0.453** | **0.470** |
+| Vector (scene-level) | 0.217 | 0.235 |
+| Vector (fixed window) | 0.215 | 0.250 |
+| Vector (single utterance) | 0.152 | 0.142 |
+| Vector (5-utterance window) | 0.258 | 0.290 |
+| Hybrid (vector + BM25) | 0.450 | 0.448 |
+
+<details>
+  <summary>What "Direct" and "Reworded" mean</summary>
+
+  Throughout this write-up I test against the same questions worded with progressively fewer of the script's literal words. **Direct** questions are taken as written from the dataset. **Reworded** questions are the dataset's own paraphrases, which change the phrasing but keep the key names intact. (A third, harder set, **Heavily Reworded**, appears in the next section.) Here is one scene with a direct and a reworded question about it:
+
+  > **Carol:** Anytime you're ready. \
+  > **Ross:** Ok, ok, here we go. (he crouches down near her stomach) Ok, where am I talking to, here? \
+  > **Carol:** Just aim for the bump. \
+  > **Ross:** ...this is too weird. I feel stupid. \
+  > **Carol:** So don't do it, it's fine. You don't have to do it just because Susan does it. \
+  > **Ross:** (quickly talking) Hello, baby. Hello, hello.
+
+  - **Direct:** "When does Carol tell Ross to talk to the baby?"
+  - **Reworded:** "At what moment does Carol invite Ross to start speaking to the baby?"
+
+  Both keep "Carol," "Ross," and "baby," the exact terms BM25 leans on.
+</details>
+
+However, in this case the opposite was true: BM25, the older keyword method, won clearly, and the hybrid scored **below** BM25 on its own. On reworded questions BM25 reached about 0.470 recall@5, roughly double the best scene-level vector. The method I expected to win was actively dragging the results down.
+
+![First evaluation, recall@5 across retrieval modes: BM25 wins, and the naive hybrid scores below it.](/images/work/friends-rag/friends-rag-08.svg)
+
+That handed me a baseline: BM25 was the mode to beat, and the best vector mode marked the bar a better vector would have to clear.
+
+### PIVOT! Looking deeper into vector retrieval performance
+
+Before reaching for anything heavier, I wanted a few cheap experiments to learn whether the weak vector performance was a property of this corpus or an artifact of my own setup.
+
+**1. Try to paraphrase better**
+
+Maybe paraphrasing was not aggressive enough? The reworded questions still scored well on BM25, so perhaps they never gave vector retrieval a real chance to pull ahead of the keyword method.
+
+<details>
+  <summary>What I tested, and what came back</summary>
+
+  I lined up the original and reworded questions side by side and noticed something. The reworded versions change the grammar (word order, connective words) but keep the content words intact: "What does Julio say to Jeannine?" might become "What is Julio's parting remark to Jeannine?", but "Julio" and "Jeannine" survive untouched. Those surviving names are exactly what BM25 keys on, which is why rewording never hurt it.
+
+  So I generated a third, harsher test set with an LLM: **Heavily Reworded** questions that swap the vocabulary itself, not just the grammar. Names and concrete nouns are replaced with descriptions, which is precisely where a keyword method should fall apart and a meaning-based one should shine. Using the same scene as before:
+
+  - **Direct:** "When does Carol tell Ross to talk to the baby?"
+  - **Reworded:** "At what moment does Carol invite Ross to start speaking to the baby?"
+  - **Heavily Reworded:** "At what point does the ex-wife instruct the paleontologist to communicate with the infant?"
+
+  By the third form, "Carol," "Ross," and "baby" are gone entirely, so BM25 has nothing to match. This is the set where vector retrieval should finally have the advantage.
+
+  | Retrieval mode | Reworded (recall@5) | Heavily Reworded (recall@5) | Δ vs Reworded |
+  |---|---|---|---|
+  | Vector (scene-level) | 0.235 | 0.090 | −0.145 |
+  | Hybrid (naive) | 0.448 | 0.085 | −0.363 |
+  | BM25 (keyword) | 0.470 | 0.020 | −0.450 |
+
+  On this set vector did beat BM25. But every score dropped: rewriting hard enough to break BM25 also strips out the signal vector needs. And BM25 fell so far (0.020) that it dragged the naive hybrid down with it.
+</details>
+
+Result: vector finally beat BM25, but only on a test set so aggressively reworded that everything scored poorly.
+
+**2. Use different chunks**
+
+What if the chunk sizes I tried were too far from the sweet spot? Every article about RAG goes out of its way to explain how critical chunk size is.
+
+<details>
+  <summary>What I tested, and what came back</summary>
+
+  A typical FriendsQA question targets a tiny exchange: "What does Julio say to Jeannine?" is about five seconds of screen time. But I had embedded whole scenes, sometimes 50 utterances long. Inside a single scene vector, the "Julio" moment is one idea competing with everything else in the scene, so the scene's vector barely resembles the question even when the answer is sitting inside it. BM25 doesn't have this problem, because it keys on the rare token "Julio" wherever it appears.
+
+  So, I tested finer chunks against the scene baseline.
+
+  | Retrieval mode | Direct (recall@5) | Reworded (recall@5) | Δ vs scene (Reworded) |
+  |---|---|---|---|
+  | Vector (scene-level) | 0.217 | 0.235 | baseline |
+  | Vector (single utterance) | 0.152 | 0.142 | −0.093 |
+  | Vector (5-utterance window) | 0.258 | 0.290 | +0.055 |
+</details>
+
+Result: granularity was a real lever. Window-level chunks beat scene-level vector, while single utterances did worse, since one line on its own loses the surrounding context that gives it meaning. The window was the better unit.
+
+**3. Removing the header**
+
+Meta-data header: during processing the raw data I added 'Friends S01E01, Scene 01' as a prefix at the start of each chunk's text before embedding, and it might hurt the signal, especially for the shorter chunking modes.
+
+<details>
+  <summary>What I tested, and what came back</summary>
+
+  The header turned out to be doing two opposite things at once. For a short window chunk, the boilerplate is a meaningful fraction of the text and pulls the embedding toward "this is a Friends scene header" instead of "this is about the baby." But for a single-utterance chunk, that same header was actually useful: a lone line of dialogue is so sparse that the episode-and-scene label gave the embedding something to hold onto. I re-ran the window and utterance modes with the header stripped out.
+
+  | Retrieval mode | With header | No header | Δ (no header) |
+  |---|---|---|---|
+  | Window — Reworded | 0.290 | 0.287 | −0.003 |
+  | Window — Heavily Reworded | 0.075 | 0.115 | **+0.040** |
+  | Single utterance — Reworded | 0.142 | 0.120 | −0.022 |
+</details>
+
+Result: removing the header helped the window chunks where it mattered most, and left ordinary reworded performance unchanged within noise. But it made the single-utterance chunks **worse**, not better: those chunks were so short that the header had been doing useful disambiguation, and stripping it left them with too little signal to embed. The best vector mode was now window-level with no header.
+
+### The outcome of the evaluation
+
+Putting the three experiments together, the pattern was clear: **chunk granularity has to match question granularity.** Scene-level chunks were too coarse for questions about a single exchange, and the metadata header only made short chunks worse. The strongest vector mode turned out to be the window-level chunk with no header. But BM25 was still the strongest single retriever overall, at about 0.470 recall@5 on paraphrased questions. That fixed the goal for the next phase: build a hybrid on top of BM25 that improves recall@5 rather than damaging it.
+
+Note: the retrieval performance correlates with the accuracy of the bot, but is not equal to it: based on the chunk I will serve an episode as a piece of context, thus it's important that a chunk from a correct episode get picked up.
+
+## Improving the quality of the retrieval
+
+There were two paths on how to improve the MRR of the retrieval:
+
+### Fuse vector and keyword retrieved results together
+
+The first path was to fine-tune fusion. My original hybrid had fused the scene-level vector with BM25, the wrong granularity. Now I fused the window-level vector with BM25 instead.
+
+This naive, equal-weight fusion beat BM25 on every test set: 0.492 recall@5 on the Emory originals against BM25's 0.470, and it held up on paraphrases instead of collapsing.
+
+![recall@5 across all three question sets: the window-plus-BM25 hybrid beats BM25 everywhere, with a 5x gain on heavily reworded questions.](/images/work/friends-rag/friends-rag-09.svg)
+
+Next, I tried an advanced fusion mode: a query-aware hybrid that would read each question and shift the weighting.
+
+<details>
+  <summary>How the query-aware weighting worked</summary>
+
+  The idea was to lean on BM25 when the query carried rare proper nouns, and lean on vector when it was abstract. To decide which, I scored each query by how rare its words are across the corpus (their inverse document frequency): a query like "Nina Bookbinder" is full of rare terms and tilts the weighting toward BM25 (up to about 80/20), while an abstract query like "what are they watching on television" has only common words and tilts toward vector.
+
+  <Caption>References: [inverse document frequency (IDF)](https://en.wikipedia.org/wiki/Tf%E2%80%93idf#Inverse_document_frequency) · [Reciprocal Rank Fusion (Cormack et al., SIGIR 2009)](https://cormack.uwaterloo.ca/cormacksigir09-rrf.pdf)</Caption>
+</details>
+
+It worked mechanically, tilting the right way on test queries. But measured across a thousand questions, the naive equal-weight version still won.
+
+| Retrieval mode | Direct (recall@5) | Reworded (recall@5) |
+|---|---|---|
+| Hybrid (naive, equal weight) | 0.492 | 0.485 |
+| Hybrid (query-aware) | 0.470 | 0.470 |
+
+The reason is that fusion earns its value from two things:
+
+- Consensus: both retrievers agreeing a scene is relevant
+- Coverage: pooling both lists, so more candidate scenes get a chance to be retrieved at all
+
+The smart weighting chased consensus by down-weighting one retriever, and that cost coverage. On this corpus the two retrievers are complementary, finding different correct scenes, so coverage was the binding constraint. I shipped the naive version: the simpler method won, and I can explain why.
+
+### Add a reranker step
+
+A reranker is a second pass. The first stage retrieves a short-list of candidates quickly; the reranker, a cross-encoder, then reads the question and each candidate together and scores how well they actually match.
+
+<details>
+  <summary>More about the cross-encoder</summary>
+
+  The difference from first-stage retrieval is what the model looks at. The vector retrieval in stage one embeds the question and each passage **separately**, ahead of time, and compares the finished vectors. A cross-encoder embeds nothing in advance: it takes the question and one candidate passage **together** as a single input and outputs one relevance score for that pair. Because it can attend to both texts at once, it judges relevance far more precisely. The cost is that nothing can be precomputed, so it has to run fresh for every question-candidate pair at query time, which is why it only runs on a short list of candidates rather than the whole corpus.
+
+  <Caption>References: [cross-encoders and the retrieve-then-rerank pattern (Sentence Transformers docs)](https://www.sbert.net/examples/sentence_transformer/applications/retrieve_rerank/README.html)</Caption>
+</details>
+
+The standard recipe is to retrieve a wide top-N, rerank, and keep the top five. I expected a clean lift in both recall and ranking.
+
+I tried two open models, MS-MARCO MiniLM and BGE. After the first manual tests it felt like the reranker was making things worse: for example, for the question "What did Ross yell when moving a couch" it pushed the main relevant "PIVOT" scene to the bottom of the list. The discipline that saved me here was research rigor, not trusting anecdotal evidence: running the proper evaluation reversed that initial impression. Across the benchmark, reranking was the single largest improvement in the whole project.
+
+![recall@5 on direct questions: reranking tops the benchmark (BGE 0.557), but adds roughly 3 seconds of latency versus 200ms.](/images/work/friends-rag/friends-rag-10.svg)
+
+| Retrieval mode | Direct (recall@5) | Reworded (recall@5) | MRR (Direct) |
+|---|---|---|---|
+| Hybrid, no rerank | 0.492 | 0.485 | 0.377 |
+| + MS-MARCO MiniLM | 0.535 | 0.535 | 0.452 |
+| + BGE | 0.557 | 0.547 | 0.462 |
+
+The spot-checks had misled me because I had hand-picked hard queries, exactly the ones a reranker is most likely to fumble. Underneath was a real trade-off: the reranker helped most on questions whose answer sits in a single passage, and it hurt on abstract, heavily reworded questions, where it degraded results sharply. But on the benchmark as a whole it was a clear win. The lesson: a vivid anecdote is not evidence.
+
+### Settling for the retrieval mode for demo
+
+The best benchmark score and the best demo are not the same choice. The reranked mode scored highest, but it had two major tradeoffs:
+
+1. For some questions it worsened the quality of selected scenes
+2. It adds significant latency, turning a ~200ms computation into about 3,000ms
+
+So the demo ships the fast hybrid by default: the window-level vector fused with BM25 by equal-weight RRF, with Claude generating the answer over the retrieved context. The reranked mode is available as an optional "high accuracy" toggle, so anyone can feel the trade-off for themselves. The takeaway I kept: optimize for the experience the user actually has, not the number on the benchmark.
+
+## The results
+
+The numbers landed where the investigation pointed. The "hybrid always wins" expectation had failed because the real problem was granularity, not method. Once the chunks matched the questions, a careful hybrid edged past the keyword baseline, and a reranker beat that on everything except the open-ended questions a demo sees most, which is exactly why the demo defaults to the faster mode. The result that mattered wasn't any single score; it was that none of this came from the build itself. It came from measuring, being surprised, and following the surprise instead of shipping past it.
+
+None of that confidence would have meant much without a final, untouched test.
+
+<details>
+  <summary>The holdout test that gave me confidence to ship</summary>
+
+  Before committing, I ran a holdout test. Early on I had set aside a sealed set of hand-curated questions about who Joey was in love with, a deliberately hard case because the evidence is spread across many episodes and the show never states it outright. I wrote down the expected answers in advance and committed them to the repo before running the final test, so the timestamp proves I didn't move the goalposts. Then I ran the set once.
+
+  It passed. Both candidate modes answered "Rachel," with cited confession dialogue, including a direct hit on the Season 8 restaurant scene. One scene I had predicted in advance would be too heavily paraphrased to retrieve, the "Tea Leaves" reconciliation, was indeed missed, so the prediction held. The honest limitation: the system reliably reaches the right answer, but which scenes it cites to get there shift with how the question is phrased.
+
+  ![Holdout result, fast hybrid mode: the system answers "Rachel" with cited scenes.](/images/work/friends-rag/friends-rag-06.png)
+  <Caption>The fast hybrid mode answering the sealed holdout question.</Caption>
+
+  ![Holdout result, high-accuracy reranked mode: the same correct answer with its own cited scenes.](/images/work/friends-rag/friends-rag-07.png)
+  <Caption>The high-accuracy reranked mode, reaching the same answer through a different set of cited scenes.</Caption>
+</details>
+
+## What I learned while working on this
+
+In this project Claude was helpful in many ways: it surfaced the standard patterns (RRF, cross-encoders, multi-granularity chunking), explained the trade-offs, wrote the code, and helped me design and run the experiments and analyze the data. However, for all its vast fluency, it doesn't truly **reason** about problems the way a human does: several times I caught it missing something deeply conceptual about the validation we were running, or grouping together things that fundamentally don't belong together. It's an amazing tool, but without supervision it can drive itself into a ditch.
+
+Interestingly, the project's complexity never overloaded it. Where I reached Claude's limit was the length of the project: as the history grew and the context accumulated, it hit "context fatigue" (Claude's own term for it). The best way to describe it: it was like talking to a very smart colleague who'd spent the entire night in the war room fixing a P0, had no sleep in 30 hours, and is now trying to talk to you about technical design. This is, of course, a metaphor - but it's useful as an illustration. Claude started guessing file names instead of using them precisely ("unified retriever" instead of "retriever_unified.py"). Instead of outputting a whole file it would describe the changes and roughly where to insert them. During deployment it gave instructions with no validation.
+
+There are two fixes (that I'm aware of) for this limitation:
+
+- (strategically) do not put everything into the main chat session (if you have a "by the way" question, or if you need to write a clean isolated standalone script - do it in a separate chat session); this will not solve the issue, but might postpone it far enough that the performance doesn't degrade below acceptable level.
+- (tactically) once you finally hit the degradation - do a structured handoff: write the current state, the decisions made, and the canonical code into a clean brief, then start a fresh session from that brief (there are skills published in GitHub designed to do exactly that)
+
+## Outside of scope
+
+This is a self-study project, not a production system, so a few things were deliberately out of scope. A production build would use a stronger reranker: a commercial one such as Cohere, or a cross-encoder fine-tuned on the FriendsQA pairs, rather than an off-the-shelf model trained on web-style question answering, which is a domain mismatch for sitcom dialogue. It would also index at several chunk sizes at once and retrieve across all of them, the general version of the granularity fix instead of my single chosen window.
+
+It is worth being honest about one casualty. In the high-accuracy reranked mode, the system can no longer answer "What did Ross yell while moving the couch?", because the reranker buries the "PIVOT" scene. Yet that same reranker improves results across the benchmark as a whole. This is the nature of probabilistic software: you tune the distribution of outcomes, and a change that lifts the average can still regress a specific, memorable case. Noticing that trade-off and deciding which mode to ship around it is the core product decision.

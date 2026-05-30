@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="360" viewBox="0 0 680 360" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" role="img">
+<title>The reranker: best score, real cost</title>
+<text x="52" y="28" font-size="16" font-weight="700" fill="#101828">The reranker: best score, real cost</text>
+<text x="52" y="48" font-size="12.5" fill="#475467">recall@5 on Direct questions. The reranker tops the benchmark but adds ~3s latency vs ~200ms.</text>
+<line x1="52" y1="296.0" x2="660" y2="296.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="300.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.0</text>
+<line x1="52" y1="258.3" x2="660" y2="258.3" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="262.3" font-size="10.5" fill="#98A2B3" text-anchor="end">0.1</text>
+<line x1="52" y1="220.7" x2="660" y2="220.7" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="224.7" font-size="10.5" fill="#98A2B3" text-anchor="end">0.2</text>
+<line x1="52" y1="183.0" x2="660" y2="183.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="187.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.3</text>
+<line x1="52" y1="145.3" x2="660" y2="145.3" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="149.3" font-size="10.5" fill="#98A2B3" text-anchor="end">0.4</text>
+<line x1="52" y1="107.7" x2="660" y2="107.7" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="111.7" font-size="10.5" fill="#98A2B3" text-anchor="end">0.5</text>
+<line x1="52" y1="70.0" x2="660" y2="70.0" stroke="#E4E7EC" stroke-width="1"/>
+<text x="44" y="74.0" font-size="10.5" fill="#98A2B3" text-anchor="end">0.6</text>
+<rect x="82.4" y="110.7" width="138.9" height="185.3" rx="2" fill="#4338CA"/>
+<text x="151.8" y="106.7" font-size="9.5" fill="#101828" text-anchor="middle">0.492</text>
+<text x="153.3" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">Hybrid</text>
+<text x="153.3" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">(~200ms)</text>
+<rect x="285.1" y="94.5" width="138.9" height="201.5" rx="2" fill="#4338CA"/>
+<text x="354.5" y="90.5" font-size="9.5" fill="#101828" text-anchor="middle">0.535</text>
+<text x="356.0" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">+ MiniLM</text>
+<text x="356.0" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">rerank</text>
+<rect x="487.7" y="86.2" width="138.9" height="209.8" rx="2" fill="#4338CA"/>
+<text x="557.2" y="82.2" font-size="9.5" fill="#101828" text-anchor="middle">0.557</text>
+<text x="558.7" y="312.0" font-size="10.5" fill="#475467" text-anchor="middle">+ BGE</text>
+<text x="558.7" y="324.0" font-size="10.5" fill="#475467" text-anchor="middle">rerank (~3s)</text>
+<rect x="52" y="337" width="11" height="11" rx="2" fill="#4338CA"/>
+<text x="68" y="346" font-size="11" fill="#101828">Direct recall@5</text>
+</svg>
